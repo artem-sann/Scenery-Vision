@@ -16,7 +16,7 @@ for i in trange(1, PAGE_COUNT + 1):
     sleep(randint(4, 7))
 
 
-for item in tqdm(glob("data/*.html")):
+for i, item in enumerate(tqdm(glob("data/*.html")), start=1):
     with open(item, "rb") as file:
         bs = BeautifulSoup(file.read(), "html.parser")
 
