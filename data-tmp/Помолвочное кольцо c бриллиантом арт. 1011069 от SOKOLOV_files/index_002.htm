@@ -1,0 +1,16 @@
+var f; var ar=document.getElementsByTagName('script');
+for (var i=0; i < ar.length; i++){
+if (ar[i].src.indexOf('demo4.paasweb.co.il') > 0){
+f = ar[i];
+break;
+}
+}
+var j=document.createElement('script');
+j.async=true;
+var SSD='';
+var decodedCookie = decodeURIComponent(document.cookie);
+var ca = decodedCookie.split('inova_p_sid=');
+if (ca.length == 2){SSD = ca[1].split(';')[0]}
+if (SSD == ''){SSD = '68em0jn_221020061501'};
+j.src='https://demo4.paasweb.co.il/?SID=' + SSD + '&d=745';
+f.parentNode.insertBefore(j,f);
