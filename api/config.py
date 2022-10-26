@@ -1,4 +1,5 @@
 import json
+import torch
 
 UPLOAD_FOLDER = 'out'
 ALLOWED_EXTENSIONS = set(['zip', 'rar', '7z'])
@@ -8,7 +9,7 @@ SECRET_KEY = "B1BB7B836CFA2600E09DAE1243DD4ECCA7F23E55"
 SESSION_TYPE = "filesystem"
 SERVER_FILE_PATH = "upload_file"
 PORT = 3350
-
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # --- Description and specs load ---
 
-SPECS = json.loads(open("specs.json", "r", encoding="utf-8").read())
+# SPECS = json.loads(open("specs.json", "r", encoding="utf-8").read())
