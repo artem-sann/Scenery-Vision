@@ -11,6 +11,17 @@ sheet = xl.sheet_names
 df1 = xl.parse(sheet[0])
 
 
+def filter_camel_case(text):
+    if "JSON" in text:
+        return text
+    result = text[0].upper()
+    for el in text[1:]:
+        if el.isupper():
+            result += " "
+        result += el.lower()
+    return result
+
+
 def remove_text_between_parens(text):
     n = 1
     while n:
@@ -22,10 +33,17 @@ def remove_text_between_parens(text):
 df1.dropna(axis='columns', how='all', inplace=True)
 df1.dropna(axis=0, how='all', inplace=True)
 df1.reset_index(drop=True, inplace=True)
+
+# применяем Camel фильтр
+for i in range(len(df1.columns)):
+    df1.iloc[0][i] = filter_camel_case(df1.iloc[0][i])
+
+# Обновляем индексацию
 headers = df1.iloc[0]
 table = pd.DataFrame(df1.values[1:], columns=headers)
 table.dropna(axis='columns', how='all', inplace=True)
 
+# удаление столбцов где все значения одинаковые
 cols = table.columns
 for i in range(len(table.columns)):
     unics = table[cols[i]].unique()
@@ -42,4 +60,4 @@ table["JSONВставки"] = table["JSONВставки"].apply(json.loads)
 table["JSONГабариты"] = table["JSONГабариты"].apply(json.loads)
 table["JSONТеги"] = table["JSONТеги"].apply(json.loads)
 
-# print(table.iloc[0, 56])
+print(table)
