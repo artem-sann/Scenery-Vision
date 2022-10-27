@@ -81,6 +81,10 @@ table["JSONГабариты"] = table["JSONГабариты"].apply(remove_text_
 table["JSONВставки"] = table["JSONВставки"].apply(remove_text_between_parens)
 table["JSONТеги"] = table["JSONТеги"].apply(remove_text_between_parens)
 
+# camel для колонки
+table["JSONВставки"] = table["JSONВставки"].apply(filter_camel_case)
+
+
 # преобразование строк в json формат
 table["JSONВставки"] = table["JSONВставки"].apply(json.loads)
 table["JSONГабариты"] = table["JSONГабариты"].apply(json.loads)
@@ -90,5 +94,8 @@ table["JSONТеги"] = table["JSONТеги"].apply(json.loads)
 table["JSONГабариты"] = table["JSONГабариты"].apply(delete_useless_info)
 table["JSONВставки"] = table["JSONВставки"].apply(delete_empty_info)
 
+#print(table["JSONВставки"][1])
+#table["JSONВставки"][1] = camel_to_json(table["JSONВставки"][1])
 print(table["JSONВставки"][1])
+
 print(table)
