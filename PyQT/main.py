@@ -32,19 +32,14 @@ for i in range(len(table.columns)):
     if len(unics) == 1 and table[cols[i]].isna().sum() == 0:
         table.drop([cols[i]], axis=1, inplace=True)
 
-
+# удаление мусора в скобках
 table["JSONГабариты"] = table["JSONГабариты"].apply(remove_text_between_parens)
 table["JSONВставки"] = table["JSONВставки"].apply(remove_text_between_parens)
 table["JSONТеги"] = table["JSONТеги"].apply(remove_text_between_parens)
 
-
-
-
-
+# преобразование строк в json формат
 table["JSONВставки"] = table["JSONВставки"].apply(json.loads)
 table["JSONГабариты"] = table["JSONГабариты"].apply(json.loads)
 table["JSONТеги"] = table["JSONТеги"].apply(json.loads)
-
-
 
 # print(table.iloc[0, 56])
