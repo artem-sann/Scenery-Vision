@@ -19,7 +19,6 @@ def delete_empty_info(data):
         for txt1 in txt:
             if txt[txt1] == "":
                 to_del.append(txt1)
-
         for p in range(len(to_del)):
             del data1[u][to_del[p]]
         to_del.clear()
@@ -37,7 +36,8 @@ def delete_useless_info(data):
     return data
 
 
-def filter_camel_case(text):
+
+def filter_camel_for_text(text):
     if "JSON" in text:
         return text
     result = text[0].upper()
@@ -46,6 +46,14 @@ def filter_camel_case(text):
             result += " "
         result += el.lower()
     return result
+
+
+def filter_camel_for_json(json):
+    for unit in json:
+        for key in unit.copy():
+            unit[filter_camel_for_text(key)] = unit.pop(key)
+    return json
+
 
 
 def remove_text_between_parens(text):
@@ -62,7 +70,7 @@ df1.reset_index(drop=True, inplace=True)
 
 # применяем Camel фильтр
 for i in range(len(df1.columns)):
-    df1.iloc[0][i] = filter_camel_case(df1.iloc[0][i])
+    df1.iloc[0][i] = filter_camel_for_text(df1.iloc[0][i])
 
 # Обновляем индексацию
 headers = df1.iloc[0]
@@ -82,20 +90,46 @@ table["JSONВставки"] = table["JSONВставки"].apply(remove_text_betw
 table["JSONТеги"] = table["JSONТеги"].apply(remove_text_between_parens)
 
 # camel для колонки
-table["JSONВставки"] = table["JSONВставки"].apply(filter_camel_case)
-
 
 # преобразование строк в json формат
 table["JSONВставки"] = table["JSONВставки"].apply(json.loads)
 table["JSONГабариты"] = table["JSONГабариты"].apply(json.loads)
 table["JSONТеги"] = table["JSONТеги"].apply(json.loads)
 
+table["JSONВставки"] = table["JSONВставки"].apply(filter_camel_for_json)
+
 # очистка json от мусора
 table["JSONГабариты"] = table["JSONГабариты"].apply(delete_useless_info)
 table["JSONВставки"] = table["JSONВставки"].apply(delete_empty_info)
 
-#print(table["JSONВставки"][1])
-#table["JSONВставки"][1] = camel_to_json(table["JSONВставки"][1])
-print(table["JSONВставки"][1])
 
-print(table)
+# print(table["JSONВставки"][1])
+# table["JSONВставки"][1] = camel_to_json(table["JSONВставки"][1])
+# print(table["JSONВставки"][1])
+
+
+
+def reformat_json(json):
+    new_json = {}
+    for unit in json:
+        if len(unit) == 2 and "Свойство" in unit and "Значение" in unit:
+            key, value = unit["Свойство"], unit["Значение"]
+            new_json[key] = value
+    return new_json
+
+
+def transform_to_json(df: pd.DataFrame):
+    results = []
+    columns = df.columns
+    for index, row in df.iterrows():
+        dict_json = {}
+        mask = pd.notna(row)
+        row = row[mask]
+        new_columns = columns[mask]
+        for column, unit in zip(new_columns, row):
+            dict_json[column] = unit
+        results.append(dict_json)
+    return results
+
+
+# json.dumps(transform_to_json(table), indent=4, ensure_ascii=False)
