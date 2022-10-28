@@ -10,6 +10,7 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = SECRET_KEY
 app.config['SESSION_TYPE'] = SESSION_TYPE
+app.config['JSON_AS_ASCII'] = False
 model = ModelRuT5()
 
 
@@ -39,6 +40,7 @@ def generation():
 def retrain():
     request_json = request.json
     log_request("/scenery-vision/api/v1.0/retrain", "POST", request_json)
+    return json.dumps(request_json)
 
 
 @app.errorhandler(404)

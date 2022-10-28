@@ -21,7 +21,7 @@ class ModelRuT5(Model):
         super().__init__()
         self.checkpoint = "sberbank-ai/ruT5-base"
         self.tokenizer = T5Tokenizer.from_pretrained(self.checkpoint)
-        self.name_model = "C:\\Users\\artem\\Documents\\Scenery-Vision\\api\\Scenery-Vision\\api\\models\\t5"
+        self.name_model = "models/t5"
         self.model = T5ForConditionalGeneration.from_pretrained(self.name_model)
         self.model.to(device)
 
@@ -61,9 +61,12 @@ class ModelRuT5(Model):
                     dict_data = unit[key1]
                     for el_dict in dict_data:
                         dict_results = []
+                        if isinstance(el_dict, str):
+                            dict_results.append(el_dict)
                         for key2 in el_dict.keys():
                             dict_results.append(f"{key2}: {el_dict[key2]}")
-                        result.append("\n".join(dict_results))
+                        string = "\n".join(dict_results)
+                        result.append(f"{key1}: {string}")
                 else:
                     result.append(f"{key1}: {unit[key1]}")
             results.append("</s>".join(result))
