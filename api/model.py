@@ -21,8 +21,8 @@ class ModelRuT5(Model):
         super().__init__()
         self.checkpoint = "sberbank-ai/ruT5-base"
         self.tokenizer = T5Tokenizer.from_pretrained(self.checkpoint)
-        self.name_model = "/api/models/t5_e43"
-        self.model = T5ForConditionalGeneration.from_pretrained("models/t5_e43")
+        self.name_model = "C:\\Users\\artem\\Documents\\Scenery-Vision\\api\\Scenery-Vision\\api\\models\\t5"
+        self.model = T5ForConditionalGeneration.from_pretrained(self.name_model)
         self.model.to(device)
 
     def generate(self, json):
