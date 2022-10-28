@@ -31,7 +31,6 @@ def main():
 @app.route('/scenery-vision/api/v1.0/generation', methods=['POST'])
 def generation():
     request_json = request.json
-    print(request_json)
     log_request("/scenery-vision/api/v1.0/generation", "POST", request_json)
     response = model.generate(request_json)
     return json.dumps(response, ensure_ascii=False).encode('utf8')
@@ -41,7 +40,7 @@ def generation():
 def retrain():
     request_json = request.json
     log_request("/scenery-vision/api/v1.0/retrain", "POST", request_json)
-    return request_json
+    return json.dumps(request_json)
 
 
 @app.errorhandler(404)
