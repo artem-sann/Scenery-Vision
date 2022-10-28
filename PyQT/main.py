@@ -88,28 +88,23 @@ table["JSONГабариты"] = table["JSONГабариты"].apply(remove_text_
 table["JSONВставки"] = table["JSONВставки"].apply(remove_text_between_parens)
 table["JSONТеги"] = table["JSONТеги"].apply(remove_text_between_parens)
 
-# camel для колонки
-
 # преобразование строк в json формат
 table["JSONВставки"] = table["JSONВставки"].apply(json.loads)
 table["JSONГабариты"] = table["JSONГабариты"].apply(json.loads)
 table["JSONТеги"] = table["JSONТеги"].apply(json.loads)
 
+# camel для столбцов
 table["JSONВставки"] = table["JSONВставки"].apply(filter_camel_for_json)
 
 # очистка json от мусора
 table["JSONГабариты"] = table["JSONГабариты"].apply(delete_useless_info)
 table["JSONВставки"] = table["JSONВставки"].apply(delete_empty_info)
+table["JSONГабариты"] = table["JSONГабариты"].apply(delete_empty_info)
 
 
-# print(table["JSONВставки"][1])
-# table["JSONВставки"][1] = camel_to_json(table["JSONВставки"][1])
-# print(table["JSONВставки"][1])
-
-
-def reformat_json(json):
+def reformat_json(j_data):
     new_json = {}
-    for unit in json:
+    for unit in j_data:
         if len(unit) == 2 and "Свойство" in unit and "Значение" in unit:
             key, value = unit["Свойство"], unit["Значение"]
             new_json[key] = value
@@ -129,10 +124,14 @@ def transform_to_json(df: pd.DataFrame):
         results.append(dict_json)
     return results
 
-json_request = json.dumps([transform_to_json(table)[0]])
-print(json_request)
+# преобразуем срез таблицы в json
+json_request = transform_to_json(table)[:5]
 
+# отправляем запрос и ждем ответа
 response = requests.post("http://127.0.0.1:3350/scenery-vision/api/v1.0/generation", json=json_request)
-response_json_text = response.json
+response_json_text = response.json()
 
 print(response_json_text)
+
+
+
