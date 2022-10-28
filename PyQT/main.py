@@ -36,7 +36,6 @@ def delete_useless_info(data):
     return data
 
 
-
 def filter_camel_for_text(text):
     if "JSON" in text:
         return text
@@ -53,7 +52,6 @@ def filter_camel_for_json(json):
         for key in unit.copy():
             unit[filter_camel_for_text(key)] = unit.pop(key)
     return json
-
 
 
 def remove_text_between_parens(text):
@@ -108,7 +106,6 @@ table["JSONВставки"] = table["JSONВставки"].apply(delete_empty_inf
 # print(table["JSONВставки"][1])
 
 
-
 def reformat_json(json):
     new_json = {}
     for unit in json:
@@ -130,6 +127,5 @@ def transform_to_json(df: pd.DataFrame):
             dict_json[column] = unit
         results.append(dict_json)
     return results
-
 
 # json.dumps(transform_to_json(table), indent=4, ensure_ascii=False)
