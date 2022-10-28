@@ -1,9 +1,10 @@
 import json
 import pandas as pd
 import re
+import requests
 
 # file = input("Введите название файла: ")
-file = 'All.xlsx'
+file = "C:\\Users\\artem\\Documents\\Scenery-Vision\\one.xlsx"
 xl = pd.ExcelFile(file)
 
 # берем первый лист и переводим в dataframe
@@ -128,4 +129,10 @@ def transform_to_json(df: pd.DataFrame):
         results.append(dict_json)
     return results
 
-# json.dumps(transform_to_json(table), indent=4, ensure_ascii=False)
+json_request = json.dumps([transform_to_json(table)[0]])
+print(json_request)
+
+response = requests.post("http://127.0.0.1:3350/scenery-vision/api/v1.0/generation", json=json_request)
+response_json_text = response.json
+
+print(response_json_text)
