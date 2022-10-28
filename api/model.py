@@ -63,6 +63,7 @@ class ModelRuT5(Model):
                         dict_results = []
                         if isinstance(el_dict, str):
                             dict_results.append(el_dict)
+                            continue
                         for key2 in el_dict.keys():
                             dict_results.append(f"{key2}: {el_dict[key2]}")
                         string = "\n".join(dict_results)
