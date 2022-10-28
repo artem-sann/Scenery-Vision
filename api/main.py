@@ -10,6 +10,7 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = SECRET_KEY
 app.config['SESSION_TYPE'] = SESSION_TYPE
+app.config['JSON_AS_ASCII'] = False
 model = ModelRuT5()
 
 
@@ -30,6 +31,7 @@ def main():
 @app.route('/scenery-vision/api/v1.0/generation', methods=['POST'])
 def generation():
     request_json = request.json
+    print(request_json)
     log_request("/scenery-vision/api/v1.0/generation", "POST", request_json)
     response = model.generate(request_json)
     return json.dumps(response, ensure_ascii=False).encode('utf8')
