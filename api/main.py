@@ -39,6 +39,7 @@ def generation():
 def retrain():
     request_json = request.json
     log_request("/scenery-vision/api/v1.0/retrain", "POST", request_json)
+    return request_json
 
 
 @app.errorhandler(404)
