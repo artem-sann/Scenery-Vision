@@ -18,11 +18,9 @@ from PySide2 import *
 from interface import *
 # QT MATERIAL
 from qt_material import *
+import pandas as pd
 
-##############################################################################################################
-global file_name
-file_name = "hello"
-
+from Thread import APIThread
 
 ##############################################################################################################
 # # MAIN WINDOW CLASS
@@ -42,6 +40,10 @@ class MainWindow(QMainWindow):
         # These title and icon will not appear on our app because we removed the title bar
         self.setWindowTitle("UTIL Manager")
         # # self.setWindowIcon("")
+
+        self.api_thread = APIThread()
+        self.api_thread.update_api_data.connect(self.update_data)
+        self.api_thread.start()
 
         # Cheat buttons
         self.ui.exel_page_button.clicked.connect(lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.exel_page))
@@ -82,8 +84,11 @@ class MainWindow(QMainWindow):
 
     # Browse files function
     def browse_files(self):
-        global file_name
-        file_name = QFileDialog.getOpenFileName(self, 'open file', 'C:', 'XLSX files (*xlsx)')
+        file_name = QFileDialog.getOpenFileName(self, 'open file', 'C:', 'XLSX files (*xlsx)')[0]
+        self.api_thread.reset_file(file_name)
+
+    def update_data(self, data):  # Получение данных с обновлением API
+        pass
 
     def change_page(self):
         # TODO: Тут нужен индекс страницы
