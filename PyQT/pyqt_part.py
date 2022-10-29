@@ -2,16 +2,10 @@
 # # IMPORTS
 ##############################################################################################################
 import sys
-import os
 
-import psutil
-import PySide2extn
-from PyQt5.uic import loadUi
 
 from resources import *
-import PyQt5.QtGui
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import pyqtProperty, QPropertyAnimation
 from PySide2 import *
 
 # IMPORT GUI FILE
@@ -25,6 +19,8 @@ from Thread import APIThread
 ##############################################################################################################
 # # MAIN WINDOW CLASS
 ##############################################################################################################
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
@@ -34,7 +30,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         # Remove window title bar
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)  # type: ignore
 
         # Set window title and icon
         # These title and icon will not appear on our app because we removed the title bar
@@ -75,7 +71,7 @@ class MainWindow(QMainWindow):
                 self.clickPosition = e.globalPos()
                 e.accept()
 
-        self.ui.top_header.mouseMoveEvent = moveWindow
+        self.ui.top_header.mouseMoveEvent = moveWindow  # type: ignore
         #
         # # Left menu toggle button (Show/hide menu labels)
         # self.ui.pushButton.clicked.connect(lambda: self.slideLeftMenu())
@@ -141,14 +137,14 @@ class MainWindow(QMainWindow):
     def restore_or_maximize_window(self):
         if self.isMaximized():
             icon2 = QtGui.QIcon()
-            icon2.addPixmap(QtGui.QPixmap(":/newPrefix/images/restore_maximize_2.svg"), QtGui.QIcon.Normal,
-                            QtGui.QIcon.Off)
+            icon2.addPixmap(QtGui.QPixmap(":/newPrefix/images/restore_maximize_2.svg"), QtGui.QIcon.Normal,  # type: ignore
+                            QtGui.QIcon.Off)  # type: ignore
             self.ui.restore_window_button.setIcon(icon2)
             self.showNormal()
         else:
             icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap(":/newPrefix/images/restore_maximize_1.svg"), QtGui.QIcon.Normal,
-                            QtGui.QIcon.Off)
+            icon1.addPixmap(QtGui.QPixmap(":/newPrefix/images/restore_maximize_1.svg"), QtGui.QIcon.Normal,  # type: ignore
+                            QtGui.QIcon.Off)  # type: ignore
             self.ui.restore_window_button.setIcon(icon1)
             self.showMaximized()
 
