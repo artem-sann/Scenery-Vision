@@ -68,7 +68,8 @@ def reformat_json(j_data: list) -> dict:
     return new_json
 
 
-def load_and_processing_excel(filename: str):  # загрузка файла и первичная обработка таблицы
+##############################################################################################################
+def load_and_processing_excel(filename: str) -> pd.DataFrame:  # загрузка файла и первичная обработка таблицы
     file = filename
     xl = pd.ExcelFile(file)
 
@@ -115,7 +116,7 @@ def load_and_processing_excel(filename: str):  # загрузка файла и 
     table["JSONВставки"] = table["JSONВставки"].apply(delete_empty_info)  # type: ignore
     table["JSONГабариты"] = table["JSONГабариты"].apply(delete_empty_info)  # type: ignore
 
-    table["JSONГабариты"] = table["JSONГабариты"].apply(reformat_json)
+    table["JSONГабариты"] = table["JSONГабариты"].apply(reformat_json)  # type: ignore
     table["Путь к фото"] = table["Путь к фото"].apply(fix_foto_links)
     table["Описание"] = ""
 
@@ -130,15 +131,15 @@ def download_image(link: str, name: str) -> None:  # link from table["Путь �
     img_file.close()
 
 
-def excel_save(table: pd.DataFrame, path):  # сохраняет таблицу по указанному пути
+def excel_save(table: pd.DataFrame, path: str) -> bool:  # сохраняет таблицу по указанному пути
     table.to_excel(path, index=False)
     return True
 
 
-def transform_to_json(df: pd.DataFrame):  # преобразует таблицу для отправки в api
+def transform_to_json(df: pd.DataFrame) -> list:  # преобразует таблицу для отправки в api
     results = []
     columns = df.columns
-    for index, row in df.iterrows():
+    for _, row in df.iterrows():
         dict_json = {}
         mask = pd.notna(row)
         row = row[mask]
@@ -148,6 +149,7 @@ def transform_to_json(df: pd.DataFrame):  # преобразует таблиц�
         results.append(dict_json)
     return results
 
+
 # TEST
-#path = "C:/Users/artem/Documents/Scenery-Vision/one.xlsx"
-#print(load_and_processing_excel(path))
+# path = "C:/Users/artem/Documents/Scenery-Vision/one.xlsx"
+# print(load_and_processing_excel(path))
