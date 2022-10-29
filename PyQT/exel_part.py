@@ -132,6 +132,7 @@ def load_and_processing_excel(filename: str):
     table["JSONГабариты"] = table["JSONГабариты"].apply(delete_empty_info)
 
     table["Путь к фото"] = table["Путь к фото"].apply(fix_foto_links)
+    table["Описание"] = ""
 
     return table  # return dataframe table
 
@@ -144,10 +145,6 @@ def download_image(link, name):  # link from table["Путь к фото"]  name
     img_file.close()
 
 
-'''
-
-table["Описание"] = ""
-for i in range(len(response_json_text)):
-    table["Описание"][i] = response_json_text[i]["Описание"]
-table.to_excel('./one_with_description.xlsx', index=False)
-'''
+def excel_save(table: pd.DataFrame, path):
+    table.to_excel(path, index=False)
+    return True
