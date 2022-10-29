@@ -123,12 +123,13 @@ def load_and_processing_excel(filename: str) -> pd.DataFrame:  # загрузк�
     return table  # return dataframe table
 
 
-def download_image(link: str, name: str) -> None:  # link from table["Путь к фото"]  name from table['Наименование']
+def download_image(link: str, name: str) -> str:  # link from table["Путь к фото"]  name from table['Наименование']
     img = requests.get(link)
-    locate = './jewelry_images' + str(name) + '.jpg'
+    locate = './jewelry_images/' + str(name) + '.jpg'
     img_file = open(locate, 'wb')
     img_file.write(img.content)
     img_file.close()
+    return locate
 
 
 def excel_save(table: pd.DataFrame, path: str) -> bool:  # сохраняет таблицу по указанному пути
