@@ -4,14 +4,6 @@ import re
 import requests
 import time
 
-# file = input("Введите название файла: ")
-file = "C:/Users/ilya2/Downloads/one.xlsx"
-xl = pd.ExcelFile(file)
-
-# берем первый лист и переводим в dataframe
-sheet = xl.sheet_names
-df1 = xl.parse(sheet[0])
-
 
 def delete_empty_info(data):
     to_del = []
@@ -68,48 +60,6 @@ def fix_foto_links(link):
     return link
 
 
-# удаление пустых столбцов и строчек, сброс индексации и переименование столбцов
-df1.dropna(axis='columns', how='all', inplace=True)
-df1.dropna(axis=0, how='all', inplace=True)
-df1.reset_index(drop=True, inplace=True)
-
-# применяем Camel фильтр
-for i in range(len(df1.columns)):
-    df1.iloc[0][i] = filter_camel_for_text(df1.iloc[0][i])
-
-# Обновляем индексацию
-headers = df1.iloc[0]
-table = pd.DataFrame(df1.values[1:], columns=headers)
-table.dropna(axis='columns', how='all', inplace=True)
-
-# удаление столбцов, где все значения одинаковые
-cols = table.columns
-for i in range(len(table.columns)):
-    unics = table[cols[i]].unique()
-    if len(unics) == 1 and table[cols[i]].isna().sum() == 0:
-        table.drop([cols[i]], axis=1, inplace=True)
-
-# удаление мусора в скобках
-table["JSONГабариты"] = table["JSONГабариты"].apply(remove_text_between_parens)
-table["JSONВставки"] = table["JSONВставки"].apply(remove_text_between_parens)
-table["JSONТеги"] = table["JSONТеги"].apply(remove_text_between_parens)
-
-# преобразование строк в json формат
-table["JSONВставки"] = table["JSONВставки"].apply(json.loads)
-table["JSONГабариты"] = table["JSONГабариты"].apply(json.loads)
-table["JSONТеги"] = table["JSONТеги"].apply(json.loads)
-
-# camel для столбцов
-table["JSONВставки"] = table["JSONВставки"].apply(filter_camel_for_json)
-
-# очистка json от мусора
-table["JSONГабариты"] = table["JSONГабариты"].apply(delete_useless_info)
-table["JSONВставки"] = table["JSONВставки"].apply(delete_empty_info)
-table["JSONГабариты"] = table["JSONГабариты"].apply(delete_empty_info)
-
-table["Путь к фото"] = table["Путь к фото"].apply(fix_foto_links)
-
-
 def reformat_json(j_data):
     new_json = {}
     for unit in j_data:
@@ -133,21 +83,76 @@ def transform_to_json(df: pd.DataFrame):
     return results
 
 
-table["Описание"] = ""
+##############################################################################################################
+def load_and_processing_excel(filename: str):
+    file = filename
+    xl = pd.ExcelFile(file)
+
+    # берем первый лист и переводим в dataframe
+    sheet = xl.sheet_names
+    df1 = xl.parse(sheet[0])
+
+    # удаление пустых столбцов и строчек, сброс индексации и переименование столбцов
+    df1.dropna(axis='columns', how='all', inplace=True)
+    df1.dropna(axis=0, how='all', inplace=True)
+    df1.reset_index(drop=True, inplace=True)
+
+    # применяем Camel фильтр
+    for i in range(len(df1.columns)):
+        df1.iloc[0][i] = filter_camel_for_text(df1.iloc[0][i])
+
+    # Обновляем индексацию
+    headers = df1.iloc[0]
+    table = pd.DataFrame(df1.values[1:], columns=headers)
+    table.dropna(axis='columns', how='all', inplace=True)
+
+    # удаление столбцов, где все значения одинаковые
+    cols = table.columns
+    for i in range(len(table.columns)):
+        unics = table[cols[i]].unique()
+        if len(unics) == 1 and table[cols[i]].isna().sum() == 0:
+            table.drop([cols[i]], axis=1, inplace=True)
+
+    # удаление мусора в скобках
+    table["JSONГабариты"] = table["JSONГабариты"].apply(remove_text_between_parens)
+    table["JSONВставки"] = table["JSONВставки"].apply(remove_text_between_parens)
+    table["JSONТеги"] = table["JSONТеги"].apply(remove_text_between_parens)
+
+    # преобразование строк в json формат
+    table["JSONВставки"] = table["JSONВставки"].apply(json.loads)
+    table["JSONГабариты"] = table["JSONГабариты"].apply(json.loads)
+    table["JSONТеги"] = table["JSONТеги"].apply(json.loads)
+
+    # camel для столбцов
+    table["JSONВставки"] = table["JSONВставки"].apply(filter_camel_for_json)
+
+    # очистка json от мусора
+    table["JSONГабариты"] = table["JSONГабариты"].apply(delete_useless_info)
+    table["JSONВставки"] = table["JSONВставки"].apply(delete_empty_info)
+    table["JSONГабариты"] = table["JSONГабариты"].apply(delete_empty_info)
+
+    table["Путь к фото"] = table["Путь к фото"].apply(fix_foto_links)
+
+    return table
+
+
+def download_image(link, name):  # link from table["Путь к фото"]  name from table['Наименование']
+    img = requests.get(link)
+    locate = './jewelry_images' + str(name) + '.jpg'
+    img_file = open(locate, 'wb')
+    img_file.write(img.content)
+    img_file.close()
+
+
+
+
 '''
+
+table["Описание"] = ""
 for i in range(len(response_json_text)):
     table["Описание"][i] = response_json_text[i]["Описание"]
 table.to_excel('./one_with_description.xlsx', index=False)
 '''
-
-mess = ""
-
-response_json_text = ""
-
-
-# y = threading.Thread(target=fake_ui_thread, args=()).start()
-# x = threading.Thread(target=api_thread, args=(table,)).start()
-
 
 '''
 for i in range(len(table["Путь к фото"])):
