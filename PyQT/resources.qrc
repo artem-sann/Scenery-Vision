@@ -1,0 +1,19 @@
+<RCC>
+  <qresource prefix="newPrefix">
+    <file>images/add.svg</file>
+    <file>images/add_exel.svg</file>
+    <file>images/arrow_to_left.svg</file>
+    <file>images/arrow_to_rightsvg.svg</file>
+    <file>images/circle_button.svg</file>
+    <file>images/Close.svg</file>
+    <file>images/download.svg</file>
+    <file>images/example_image.png</file>
+    <file>images/exit.svg</file>
+    <file>images/header.png</file>
+    <file>images/main_backround.png</file>
+    <file>images/minimize.svg</file>
+    <file>images/pushed_circle_button.svg</file>
+    <file>images/restore_maximize_1.svg</file>
+    <file>images/restore_maximize_2.svg</file>
+  </qresource>
+</RCC>
