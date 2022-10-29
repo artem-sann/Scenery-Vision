@@ -43,7 +43,6 @@ class MainWindow(QMainWindow):
 
         self.api_thread = APIThread()
         self.api_thread.update_api_data.connect(self.update_data)
-        self.api_thread.start()
 
         # Cheat buttons
         self.ui.exel_page_button.clicked.connect(lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.exel_page))
@@ -86,9 +85,10 @@ class MainWindow(QMainWindow):
     def browse_files(self):
         file_name = QFileDialog.getOpenFileName(self, 'open file', 'C:', 'XLSX files (*xlsx)')[0]
         self.api_thread.reset_file(file_name)
+        self.api_thread.start()
 
     def update_data(self, data):  # Получение данных с обновлением API
-        pass
+        print(data)
 
     def change_page(self):
         # TODO: Тут нужен индекс страницы
