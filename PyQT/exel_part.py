@@ -133,7 +133,7 @@ def load_and_processing_excel(filename: str):
 
     table["Путь к фото"] = table["Путь к фото"].apply(fix_foto_links)
 
-    return table
+    return table  # return dataframe table
 
 
 def download_image(link, name):  # link from table["Путь к фото"]  name from table['Наименование']
@@ -144,21 +144,10 @@ def download_image(link, name):  # link from table["Путь к фото"]  name
     img_file.close()
 
 
-
-
 '''
 
 table["Описание"] = ""
 for i in range(len(response_json_text)):
     table["Описание"][i] = response_json_text[i]["Описание"]
 table.to_excel('./one_with_description.xlsx', index=False)
-'''
-
-'''
-for i in range(len(table["Путь к фото"])):
-    img = requests.get(table["Путь к фото"][i])
-    locate = 'C:\\Users\\artem\\Documents\\Scenery-Vision\\images\\' + str(table['Наименование'][i]) + '.jpg'
-    img_file = open(locate, 'wb')
-    img_file.write(img.content)
-    img_file.close()
 '''
