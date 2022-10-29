@@ -2,6 +2,8 @@ import json
 import pandas as pd
 import re
 import requests
+import threading
+import time
 
 # file = input("Введите название файла: ")
 file = "C:\\Users\\artem\\Documents\\Scenery-Vision\\one.xlsx"
@@ -62,6 +64,11 @@ def remove_text_between_parens(text):
     return text
 
 
+def fix_foto_links(link):
+    link = link.replace(chr(92), "/")
+    return link
+
+
 # удаление пустых столбцов и строчек, сброс индексации и переименование столбцов
 df1.dropna(axis='columns', how='all', inplace=True)
 df1.dropna(axis=0, how='all', inplace=True)
@@ -101,6 +108,8 @@ table["JSONГабариты"] = table["JSONГабариты"].apply(delete_usele
 table["JSONВставки"] = table["JSONВставки"].apply(delete_empty_info)
 table["JSONГабариты"] = table["JSONГабариты"].apply(delete_empty_info)
 
+table["Путь к фото"] = table["Путь к фото"].apply(fix_foto_links)
+
 
 def reformat_json(j_data):
     new_json = {}
@@ -124,14 +133,55 @@ def transform_to_json(df: pd.DataFrame):
         results.append(dict_json)
     return results
 
-# преобразуем срез таблицы в json
-json_request = transform_to_json(table)[:5]
 
-# отправляем запрос и ждем ответа
-response = requests.post("http://127.0.0.1:3350/scenery-vision/api/v1.0/generation", json=json_request)
-response_json_text = response.json()
+table["Описание"] = ""
+'''
+for i in range(len(response_json_text)):
+    table["Описание"][i] = response_json_text[i]["Описание"]
 
-print(response_json_text)
+table.to_excel('./one_with_description.xlsx', index=False)
+'''
+
+mess = ""
+
+response_json_text = ""
 
 
+def api_thread(table):
+    print("Start thread")
+    # преобразуем срез таблицы в json
+    json_request = transform_to_json(table)[:2]
+    # отправляем запрос и ждем ответа
+    response = requests.post("http://127.0.0.1:3350/scenery-vision/api/v1.0/generation", json=json_request)
 
+    global response_json_text
+    response_json_text = response.json()
+    global mess
+    mess = "Передал"
+
+    # print(response_json_text)
+    print("End thread")
+
+
+def fake_ui_thread():
+    while True:
+        global mess
+        global response_json_text
+        print(1)
+        time.sleep(3)
+        print(mess)
+        print(response_json_text)
+
+
+y = threading.Thread(target=fake_ui_thread, args=()).start()
+x = threading.Thread(target=api_thread, args=(table,)).start()
+
+
+'''
+for i in range(len(table["Путь к фото"])):
+    img = requests.get(table["Путь к фото"][i])
+    locate = 'C:\\Users\\artem\\Documents\\Scenery-Vision\\images\\' + str(table['Наименование'][i]) + '.jpg'
+    img_file = open(locate, 'wb')
+    img_file.write(img.content)
+    img_file.close()
+'''
