@@ -150,10 +150,6 @@ def transform_to_json(df: pd.DataFrame) -> list:  # преобразует та�
     return results
 
 
-def load_data(image_path: str) -> None:
-    raise NotImplementedError
-
-
 # TEST
 # path = "C:/Users/artem/Documents/Scenery-Vision/one.xlsx"
 # print(load_and_processing_excel(path))
