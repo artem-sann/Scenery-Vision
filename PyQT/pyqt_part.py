@@ -98,7 +98,18 @@ class MainWindow(QMainWindow):
         generated_text = "\n".join([f"{char_key}: {char_val}" for char_key, char_val in zip(chars_data.index, chars_data.values)])
         self.ui.characteristics_label.setText(generated_text)
 
-    def load_page(self, image_path: str, generated_data: pd.DataFrame, page_idx: int, chars_idx: int, description_col: str = "Описание", chars_on_page: int = 4) -> None:
+    def load_description(self, description_data: pd.Series, description_idx: int) -> None:
+        generated_description = description_data.values[description_idx]
+        self.ui.descreption_label.setText(generated_description)  # type: ignore
+
+    def load_page(
+        self, image_path: str,
+        generated_data: pd.DataFrame,
+        page_idx: int, chars_idx: int,
+        description_idx: int,
+        description_col: str = "Описание",
+        chars_on_page: int = 4
+    ) -> None:
         # Load image
         # TODO: Resize image (can be done serverside or in download func)
         pixmap = QtGui.QPixmap(image_path)
@@ -108,11 +119,10 @@ class MainWindow(QMainWindow):
         cur_characteristics = characteristics[chars_idx:chars_idx + chars_on_page]
         characteristics_data = generated_data[cur_characteristics].iloc[page_idx].copy()
         self.load_chars(characteristics_data)
-
-        generated_description = generated_data[description_col].iloc[page_idx].values[0]
-        self.ui.descreption_label.setText(generated_description)
+        self.load_description(description_data=generated_data[description_col].iloc[page_idx], description_idx=description_idx)
 
     # Add mouse events to the window
+
     def mousePressEvent(self, event):
         self.clickPosition = event.globalPos()
 
