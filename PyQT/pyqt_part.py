@@ -28,8 +28,14 @@ char_index = 0
 global desc_index
 desc_index = 0
 
+final_data = pd.DataFrame()
+
+
 def update_data(data):  # Получение данных с обновлением API
-    print(data)
+    global final_data
+    final_data = final_data.append(data, ignore_index=True)
+
+    print(final_data)
     print(glob_size)
     #TODO Добавить в очередь полученные куски таблицы
 
@@ -44,10 +50,10 @@ class MainWindow(QMainWindow):
 
         # Remove window title bar
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)  # type: ignore
-
+        self.ui.stackedWidget.setCurrentWidget(self.ui.exel_page)
         # Set window title and icon
         # These title and icon will not appear on our app because we removed the title bar
-        self.setWindowTitle("UTIL Manager")
+        self.setWindowTitle("Scenery Vision")
         # # self.setWindowIcon("")
 
         self.api_thread = APIThread()
@@ -98,16 +104,15 @@ class MainWindow(QMainWindow):
     def browse_files(self):
         self.ui.stackedWidget.setCurrentWidget(self.ui.loading_page)
         file_name = QFileDialog.getOpenFileName(self, 'open file', 'C:', 'XLSX files (*xlsx)')[0]
-        self.api_thread.reset_file(file_name)
-        self.api_thread.start()
-
-        while not Thread.load_flag:
-            print("ждемс")
-            time.sleep(1)
-            print(Thread.load_flag)
-
-        self.ui.stackedWidget.setCurrentWidget(self.ui.main_page)
-        #self.load_page(download_image())
+        if file_name != "":
+            self.api_thread.reset_file(file_name)
+            self.api_thread.start()
+            while not Thread.load_flag:
+                print("ждемс")
+                time.sleep(1)
+                print(Thread.load_flag)
+            self.ui.stackedWidget.setCurrentWidget(self.ui.main_page)
+            #self.load_page(download_image())
 
     def change_page_left(self):  # left
         global page_index
