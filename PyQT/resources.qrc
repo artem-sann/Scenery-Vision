@@ -1,10 +1,5 @@
 <RCC>
   <qresource prefix="newPrefix">
-    <file>images/AbhayaLibre-Bold.ttf</file>
-    <file>images/AbhayaLibre-ExtraBold.ttf</file>
-    <file>images/AbhayaLibre-Medium.ttf</file>
-    <file>images/AbhayaLibre-Regular.ttf</file>
-    <file>images/AbhayaLibre-SemiBold.ttf</file>
     <file>images/add.svg</file>
     <file>images/add_exel.svg</file>
     <file>images/arrow_to_left.svg</file>
@@ -17,11 +12,18 @@
     <file>images/header.png</file>
     <file>images/main_backround.png</file>
     <file>images/minimize.svg</file>
-    <file>images/Mulish-Bold.ttf</file>
-    <file>images/Mulish-Medium.ttf</file>
-    <file>images/Mulish-Regular.ttf</file>
     <file>images/pushed_circle_button.svg</file>
     <file>images/restore_maximize_1.svg</file>
     <file>images/restore_maximize_2.svg</file>
+  </qresource>
+  <qresource prefix="fonts">
+    <file>fonts/AbhayaLibre-Bold.ttf</file>
+    <file>fonts/AbhayaLibre-ExtraBold.ttf</file>
+    <file>fonts/AbhayaLibre-Medium.ttf</file>
+    <file>fonts/AbhayaLibre-Regular.ttf</file>
+    <file>fonts/AbhayaLibre-SemiBold.ttf</file>
+    <file>fonts/Mulish-Bold.ttf</file>
+    <file>fonts/Mulish-Medium.ttf</file>
+    <file>fonts/Mulish-Regular.ttf</file>
   </qresource>
 </RCC>
