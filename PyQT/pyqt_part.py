@@ -3,8 +3,9 @@
 ##############################################################################################################
 import sys
 
-
+from exel_part import pd
 from resources import *
+from typing import Iterable
 from PyQt5.QtWidgets import *
 from PySide2 import *
 
@@ -79,9 +80,31 @@ class MainWindow(QMainWindow):
         global file_name
         file_name = QFileDialog.getOpenFileName(self, 'open file', 'C:', 'XLSX files (*xlsx)')
 
-    def load_data(self, image_path: str) -> None:
+    def change_page(self):
+        # TODO: Тут нужен индекс страницы
+        raise NotImplementedError
+
+    def change_chars_page(self):
+        # TODO: Тут нужен индекс страницы
+        raise NotImplementedError
+
+    def load_chars(self, chars_data: pd.Series) -> None:
+        generated_text = "\n".join([f"{char_key}: {char_val}" for char_key, char_val in zip(chars_data.index, chars_data.values)])
+        self.ui.characteristics_label.setText(generated_text)
+
+    def load_page(self, image_path: str, generated_data: pd.DataFrame, page_idx: int, chars_idx: int, description_col: str = "Описание", chars_on_page: int = 4) -> None:
+        # Load image
+        # TODO: Resize image (can be done serverside or in download func)
         pixmap = QtGui.QPixmap(image_path)
         self.ui.image_label.setPixmap(pixmap)
+
+        characteristics = generated_data.drop(description_col, axis=0).columns.tolist()
+        cur_characteristics = characteristics[chars_idx:chars_idx + chars_on_page]
+        characteristics_data = generated_data[cur_characteristics].iloc[page_idx].copy()
+        self.load_chars(characteristics_data)
+
+        generated_description = generated_data[description_col].iloc[page_idx].values[0]
+        self.ui.descreption_label.setText(generated_description)
 
     # Add mouse events to the window
 
