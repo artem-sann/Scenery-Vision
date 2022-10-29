@@ -4,14 +4,14 @@ import re
 import requests
 
 
-def delete_empty_info(data: list) -> list:
+def delete_empty_info(data: list[dict]) -> list:
     to_del = []
     reformated_data = data.copy()
     u = 0
     for txt in data:
-        for txt_elem in txt:
-            if txt[txt_elem] == "":  # FIXME: Тут не должно быть индекса?
-                to_del.append(txt_elem)
+        for txt_key in txt.keys():
+            if txt[txt_key] == "":
+                to_del.append(txt_key)
         for p in range(len(to_del)):
             del reformated_data[u][to_del[p]]
         to_del.clear()
