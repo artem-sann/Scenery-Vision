@@ -6,6 +6,8 @@ from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot
 
 from exel_part import load_and_processing_excel, transform_to_json
 
+glob_size = 0
+load_flag = False
 
 class APIThread(QThread):
     update_api_data = pyqtSignal(pd.DataFrame)
@@ -24,15 +26,23 @@ class APIThread(QThread):
     def reset_file(self, path_to_table: str):
         self.path_to_table = path_to_table
         self.flag = True
+        global load_flag
+        load_flag = False
 
     def run(self):
         while True:
+            print("Работает")
             try:
                 if self.flag:
                     self.flag = False
                     self.table = load_and_processing_excel(self.path_to_table)
+                    global load_flag
+                    load_flag = True
                     self.size = self.table.shape[0]
+                    global glob_size
+                    glob_size = self.size
                     self.count = 0
+
                 if self.count >= self.size:
                     return
                 slice = self.table.iloc[self.count: self.count + self.batch]

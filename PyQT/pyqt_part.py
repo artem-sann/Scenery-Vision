@@ -2,8 +2,10 @@
 # # IMPORTS
 ##############################################################################################################
 import sys
+import time
 
-
+import Thread
+from exel_part import download_image
 from resources import *
 from PyQt5.QtWidgets import *
 from PySide2 import *
@@ -14,11 +16,22 @@ from interface import *
 from qt_material import *
 import pandas as pd
 
-from Thread import APIThread
+from Thread import APIThread, glob_size, load_flag
 
 ##############################################################################################################
 # # MAIN WINDOW CLASS
 ##############################################################################################################
+global page_index
+page_index = 0
+global char_index
+char_index = 0
+global desc_index
+desc_index = 0
+
+def update_data(data):  # Получение данных с обновлением API
+    print(data)
+    print(glob_size)
+    #TODO Добавить в очередь полученные куски таблицы
 
 
 class MainWindow(QMainWindow):
@@ -38,13 +51,14 @@ class MainWindow(QMainWindow):
         # # self.setWindowIcon("")
 
         self.api_thread = APIThread()
-        self.api_thread.update_api_data.connect(self.update_data)
+        self.api_thread.update_api_data.connect(update_data)
 
         # Cheat buttons
         self.ui.exel_page_button.clicked.connect(lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.exel_page))
         self.ui.main_page_button.clicked.connect(lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.main_page))
         self.ui.loading_page_button.clicked.connect(
             lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.loading_page))
+
 
         # Hiding unnecessary buttons
         # self.ui.add_button.hide()
@@ -59,6 +73,9 @@ class MainWindow(QMainWindow):
 
         # Exel huge button
         self.ui.exel_button.clicked.connect(self.browse_files)
+
+        self.ui.left_arrow_button.clicked.connect(self.change_page_left)
+        self.ui.right_arrow_button.clicked.connect(self.change_page_right)
 
         # Add button
         self.ui.add_button.clicked.connect(self.browse_files)
@@ -80,19 +97,32 @@ class MainWindow(QMainWindow):
     # Browse files function
     def browse_files(self):
         file_name = QFileDialog.getOpenFileName(self, 'open file', 'C:', 'XLSX files (*xlsx)')[0]
+        self.ui.stackedWidget.setCurrentWidget(self.ui.loading_page)
         self.api_thread.reset_file(file_name)
         self.api_thread.start()
 
-    def update_data(self, data):  # Получение данных с обновлением API
-        print(data)
+        while not Thread.load_flag:
+            print("ждемс")
+            time.sleep(1)
+            print(Thread.load_flag)
 
-    def change_page(self):
-        # TODO: Тут нужен индекс страницы
-        raise NotImplementedError
+        self.ui.stackedWidget.setCurrentWidget(self.ui.main_page)
+        #self.load_page(download_image())
 
-    def change_chars_page(self):
-        # TODO: Тут нужен индекс страницы
-        raise NotImplementedError
+    def change_page_left(self):  # left
+        global page_index
+        if page_index > 0:
+            page_index = page_index - 1
+            print("left")
+
+
+    def change_page_right(self):   # Right
+        global page_index
+        if page_index < glob_size:
+            page_index = page_index + 1
+            print("Right")
+
+
 
     def load_chars(self, chars_data: pd.Series) -> None:
         generated_text = "\n".join([f"{char_key}: {char_val}" for char_key, char_val in zip(chars_data.index, chars_data.values)])
