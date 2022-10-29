@@ -42,6 +42,7 @@ class APIThread(QThread):
                 self.update_api_data.emit(slice)
                 self.count += self.batch
             except Exception as ex:
+                print(ex)
                 time.sleep(1)
 
     def get_response(self, json_request):
