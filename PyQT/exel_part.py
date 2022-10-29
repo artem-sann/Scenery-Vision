@@ -109,14 +109,14 @@ def load_and_processing_excel(filename: str) -> pd.DataFrame:  # загрузк�
     table["JSONТеги"] = table["JSONТеги"].apply(json.loads)
 
     # camel для столбцов
-    table["JSONВставки"] = table["JSONВставки"].apply(filter_camel_for_json)
+    table["JSONВставки"] = table["JSONВставки"].apply(filter_camel_for_json)  # type: ignore
 
     # очистка json от мусора
-    table["JSONГабариты"] = table["JSONГабариты"].apply(delete_useless_info)
-    table["JSONВставки"] = table["JSONВставки"].apply(delete_empty_info)
-    table["JSONГабариты"] = table["JSONГабариты"].apply(delete_empty_info)
+    table["JSONГабариты"] = table["JSONГабариты"].apply(delete_useless_info)  # type: ignore
+    table["JSONВставки"] = table["JSONВставки"].apply(delete_empty_info)  # type: ignore
+    table["JSONГабариты"] = table["JSONГабариты"].apply(delete_empty_info)  # type: ignore
 
-    table["JSONГабариты"] = table["JSONГабариты"].apply(reformat_json)
+    table["JSONГабариты"] = table["JSONГабариты"].apply(reformat_json)  # type: ignore
     table["Путь к фото"] = table["Путь к фото"].apply(fix_foto_links)
     table["Описание"] = ""
 
