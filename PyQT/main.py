@@ -5,7 +5,7 @@ from pyqt_part import MainWindow, QApplication
 
 def main():
     app = QApplication(sys.argv)
-    window = MainWindow()
+    MainWindow()
     sys.exit(app.exec_())
 
 

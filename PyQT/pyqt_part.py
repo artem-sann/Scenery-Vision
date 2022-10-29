@@ -96,8 +96,8 @@ class MainWindow(QMainWindow):
 
     # Browse files function
     def browse_files(self):
-        file_name = QFileDialog.getOpenFileName(self, 'open file', 'C:', 'XLSX files (*xlsx)')[0]
         self.ui.stackedWidget.setCurrentWidget(self.ui.loading_page)
+        file_name = QFileDialog.getOpenFileName(self, 'open file', 'C:', 'XLSX files (*xlsx)')[0]
         self.api_thread.reset_file(file_name)
         self.api_thread.start()
 
