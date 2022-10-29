@@ -8,14 +8,13 @@ def delete_empty_info(data: list[dict]) -> list:
     to_del = []
     reformated_data = data.copy()
     u = 0
-    for txt in data:
+    for idx, txt in enumerate(data):
         for txt_key in txt.keys():
             if txt[txt_key] == "":
                 to_del.append(txt_key)
         for p in range(len(to_del)):
-            del reformated_data[u][to_del[p]]
+            del reformated_data[idx][to_del[p]]
         to_del.clear()
-        u = u + 1
 
     return reformated_data
 
