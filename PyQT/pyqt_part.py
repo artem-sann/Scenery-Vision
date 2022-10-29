@@ -13,15 +13,12 @@ import PyQt5.QtGui
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import pyqtProperty, QPropertyAnimation
 from PySide2 import *
+from Thread import APIThread
 
 # IMPORT GUI FILE
 from interface import *
 # QT MATERIAL
 from qt_material import *
-
-##############################################################################################################
-global file_name
-file_name = "hello"
 
 
 ##############################################################################################################
@@ -34,6 +31,11 @@ class MainWindow(QMainWindow):
         self.oldPosition = None
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
+        # APIThread
+        self.api_thread = APIThread()
+        self.api_thread.update_api_data.connect(self.update_api_data)
+        self.api_thread.start()
 
         # Remove window title bar
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -82,9 +84,12 @@ class MainWindow(QMainWindow):
 
     # Browse files function
     def browse_files(self):
-        global file_name
-        file_name = QFileDialog.getOpenFileName(self, 'open file', 'C:', 'XLSX files (*xlsx)')
+        file_name = QFileDialog.getOpenFileName(self, 'open file', 'C:', 'XLSX files (*xlsx)')[0]
+        self.api_thread.reset_file(file_name)
+        self.api_thread.start()
 
+    def update_api_data(self, data):
+        pass  # Вызывается при получении
 
     # Add mouse events to the window
     def mousePressEvent(self, event):
@@ -123,14 +128,3 @@ class MainWindow(QMainWindow):
             self.showMaximized()
 
 
-##############################################################################################################
-# # EXECUTE APP
-##############################################################################################################
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    sys.exit(app.exec_())
-
-##############################################################################################################
-# # END
-##############################################################################################################

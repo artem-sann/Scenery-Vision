@@ -25,14 +25,14 @@ class Ui_MainWindow(object):
         MainWindow.setToolTip("")
         MainWindow.setAutoFillBackground(False)
         MainWindow.setStyleSheet("*{\n"
-"    border: none;\n"
-"}")
+                                 "    border: none;\n"
+                                 "}")
         MainWindow.setDocumentMode(False)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setStyleSheet("QWidget#centralwidget {\n"
-"    \n"
-"    background-image: url(:/newPrefix/images/main_backround.png);\n"
-"}")
+                                         "    \n"
+                                         "    background-image: url(:/newPrefix/images/main_backround.png);\n"
+                                         "}")
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -42,10 +42,10 @@ class Ui_MainWindow(object):
         self.header.setMinimumSize(QtCore.QSize(0, 100))
         self.header.setMaximumSize(QtCore.QSize(16777215, 10000))
         self.header.setStyleSheet("QFrame#header {\n"
-"    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(0, 0, 0, 140));\n"
-"}\n"
-"\n"
-"")
+                                  "    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(0, 0, 0, 140));\n"
+                                  "}\n"
+                                  "\n"
+                                  "")
         self.header.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.header.setFrameShadow(QtWidgets.QFrame.Plain)
         self.header.setLineWidth(0)
@@ -83,8 +83,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addWidget(self.pushButton_5)
         self.minimize_window_button = QtWidgets.QPushButton(self.frame_with_window_buttons)
         self.minimize_window_button.setStyleSheet("QPushButton#minimize_window_button::hover {\n"
-"    background-color: rgb(17, 164, 255);\n"
-"}")
+                                                  "    background-color: rgb(17, 164, 255);\n"
+                                                  "}")
         self.minimize_window_button.setText("")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/newPrefix/images/minimize.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -93,8 +93,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addWidget(self.minimize_window_button)
         self.restore_window_button = QtWidgets.QPushButton(self.frame_with_window_buttons)
         self.restore_window_button.setStyleSheet("QPushButton#restore_window_button::hover {\n"
-"    background-color: rgb(17, 164, 255);\n"
-"}")
+                                                 "    background-color: rgb(17, 164, 255);\n"
+                                                 "}")
         self.restore_window_button.setText("")
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap(":/newPrefix/images/restore_maximize_2.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -104,8 +104,8 @@ class Ui_MainWindow(object):
         self.close_window_button = QtWidgets.QPushButton(self.frame_with_window_buttons)
         self.close_window_button.setEnabled(True)
         self.close_window_button.setStyleSheet("QPushButton#close_window_button::hover {\n"
-"    background-color: rgb(255, 0, 0);\n"
-"}")
+                                               "    background-color: rgb(255, 0, 0);\n"
+                                               "}")
         self.close_window_button.setText("")
         icon3 = QtGui.QIcon()
         icon3.addPixmap(QtGui.QPixmap(":/newPrefix/images/Close.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -167,8 +167,8 @@ class Ui_MainWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferDefault)
         self.scenary_vision_label.setFont(font)
         self.scenary_vision_label.setStyleSheet("color: rgb(255, 255, 255);\n"
-"\n"
-"")
+                                                "\n"
+                                                "")
         self.scenary_vision_label.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.scenary_vision_label.setFrameShadow(QtWidgets.QFrame.Plain)
         self.scenary_vision_label.setObjectName("scenary_vision_label")
@@ -256,7 +256,7 @@ class Ui_MainWindow(object):
         self.left_arrow_button.setIcon(icon7)
         self.left_arrow_button.setIconSize(QtCore.QSize(100, 200))
         self.left_arrow_button.setObjectName("left_arrow_button")
-        self.verticalLayout_3.addWidget(self.left_arrow_button, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.verticalLayout_3.addWidget(self.left_arrow_button, 0, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.horizontalLayout_4.addWidget(self.left_arrow_frame, 0, QtCore.Qt.AlignLeft)
         self.main_area_wrap_frame = QtWidgets.QFrame(self.main_page)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
@@ -282,9 +282,9 @@ class Ui_MainWindow(object):
         self.title_frame = QtWidgets.QFrame(self.main_information_frame)
         self.title_frame.setEnabled(True)
         self.title_frame.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-"border-top-right-radius: 20px;\n"
-"border-top-left-radius: 20px;\n"
-"")
+                                       "border-top-right-radius: 20px;\n"
+                                       "border-top-left-radius: 20px;\n"
+                                       "")
         self.title_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.title_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.title_frame.setObjectName("title_frame")
@@ -307,8 +307,8 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.info_frame.sizePolicy().hasHeightForWidth())
         self.info_frame.setSizePolicy(sizePolicy)
         self.info_frame.setStyleSheet("background-color: rgba(255, 250, 237, 230);\n"
-"border-bottom-right-radius: 20px;\n"
-"border-bottom-left-radius: 20px;")
+                                      "border-bottom-right-radius: 20px;\n"
+                                      "border-bottom-left-radius: 20px;")
         self.info_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.info_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.info_frame.setObjectName("info_frame")
@@ -338,10 +338,10 @@ class Ui_MainWindow(object):
         self.characteristics_frame.setMinimumSize(QtCore.QSize(0, 250))
         self.characteristics_frame.setMaximumSize(QtCore.QSize(16777215, 250))
         self.characteristics_frame.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-"border-radius: 20px\n"
-"\n"
-"\n"
-"")
+                                                 "border-radius: 20px\n"
+                                                 "\n"
+                                                 "\n"
+                                                 "")
         self.characteristics_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.characteristics_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.characteristics_frame.setObjectName("characteristics_frame")
@@ -403,7 +403,8 @@ class Ui_MainWindow(object):
         self.characteristics_button_1.setSizePolicy(sizePolicy)
         self.characteristics_button_1.setText("")
         icon8 = QtGui.QIcon()
-        icon8.addPixmap(QtGui.QPixmap(":/newPrefix/images/pushed_circle_button.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon8.addPixmap(QtGui.QPixmap(":/newPrefix/images/pushed_circle_button.svg"), QtGui.QIcon.Normal,
+                        QtGui.QIcon.Off)
         self.characteristics_button_1.setIcon(icon8)
         self.characteristics_button_1.setIconSize(QtCore.QSize(25, 25))
         self.characteristics_button_1.setDefault(True)
@@ -434,7 +435,7 @@ class Ui_MainWindow(object):
         self.characteristics_button_3.setIconSize(QtCore.QSize(25, 25))
         self.characteristics_button_3.setObjectName("characteristics_button_3")
         self.horizontalLayout_3.addWidget(self.characteristics_button_3)
-        self.verticalLayout_10.addWidget(self.buttons_frame, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignBottom)
+        self.verticalLayout_10.addWidget(self.buttons_frame, 0, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignBottom)
         self.horizontalLayout_6.addWidget(self.characteristics_frame)
         self.verticalLayout_7.addWidget(self.first_line)
         self.description_frame = QtWidgets.QFrame(self.info_frame)
@@ -455,7 +456,7 @@ class Ui_MainWindow(object):
         self.description_text_frame.setSizePolicy(sizePolicy)
         self.description_text_frame.setMinimumSize(QtCore.QSize(0, 200))
         self.description_text_frame.setStyleSheet("border-radius: 20px;\n"
-"background-color: rgb(255, 255, 255);")
+                                                  "background-color: rgb(255, 255, 255);")
         self.description_text_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.description_text_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.description_text_frame.setObjectName("description_text_frame")
@@ -522,7 +523,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.frame_6.sizePolicy().hasHeightForWidth())
         self.frame_6.setSizePolicy(sizePolicy)
         self.frame_6.setStyleSheet("background: None;\n"
-"")
+                                   "")
         self.frame_6.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_6.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_6.setObjectName("frame_6")
@@ -537,15 +538,15 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.pushButton_2.sizePolicy().hasHeightForWidth())
         self.pushButton_2.setSizePolicy(sizePolicy)
         self.pushButton_2.setStyleSheet("border: none;\n"
-"outline: none;\n"
-"background: None;")
+                                        "outline: none;\n"
+                                        "background: None;")
         self.pushButton_2.setText("")
         icon10 = QtGui.QIcon()
         icon10.addPixmap(QtGui.QPixmap(":/newPrefix/images/arrow_to_rightsvg.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_2.setIcon(icon10)
         self.pushButton_2.setIconSize(QtCore.QSize(100, 200))
         self.pushButton_2.setObjectName("pushButton_2")
-        self.verticalLayout_4.addWidget(self.pushButton_2, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.verticalLayout_4.addWidget(self.pushButton_2, 0, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.horizontalLayout_4.addWidget(self.frame_6, 0, QtCore.Qt.AlignRight)
         self.stackedWidget.addWidget(self.main_page)
         self.loading_page = QtWidgets.QWidget()
@@ -572,4 +573,5 @@ class Ui_MainWindow(object):
         self.characteristics_label.setText(_translate("MainWindow", "fergrgresgrgresgrsegrg"))
         self.label_5.setText(_translate("MainWindow", "Описание"))
         self.descreption_label.setText(_translate("MainWindow", "gfrgsrgrgrgr"))
-import resources
+
+
