@@ -1,17 +1,12 @@
 ##############################################################################################################
-# # IMPORTS
+# IMPORTS
 ##############################################################################################################
 import sys
-import os
 
-import psutil
-import PySide2extn
-from PyQt5.uic import loadUi
-
+from exel_part import pd
 from resources import *
-import PyQt5.QtGui
+from typing import Iterable
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import pyqtProperty, QPropertyAnimation
 from PySide2 import *
 
 # IMPORT GUI FILE
@@ -25,7 +20,7 @@ file_name = "hello"
 
 
 ##############################################################################################################
-# # MAIN WINDOW CLASS
+# MAIN WINDOW CLASS
 ##############################################################################################################
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -36,12 +31,12 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         # Remove window title bar
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)  # type: ignore
 
         # Set window title and icon
         # These title and icon will not appear on our app because we removed the title bar
         self.setWindowTitle("UTIL Manager")
-        # # self.setWindowIcon("")
+        # self.setWindowIcon("")
 
         # Cheat buttons
         self.ui.exel_page_button.clicked.connect(lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.exel_page))
@@ -73,9 +68,9 @@ class MainWindow(QMainWindow):
                 self.clickPosition = e.globalPos()
                 e.accept()
 
-        self.ui.top_header.mouseMoveEvent = moveWindow
+        self.ui.top_header.mouseMoveEvent = moveWindow  # type: ignore
         #
-        # # Left menu toggle button (Show/hide menu labels)
+        # Left menu toggle button (Show/hide menu labels)
         # self.ui.pushButton.clicked.connect(lambda: self.slideLeftMenu())
 
         self.show()
@@ -85,12 +80,38 @@ class MainWindow(QMainWindow):
         global file_name
         file_name = QFileDialog.getOpenFileName(self, 'open file', 'C:', 'XLSX files (*xlsx)')
 
+    def change_page(self):
+        # TODO: Тут нужен индекс страницы
+        raise NotImplementedError
+
+    def change_chars_page(self):
+        # TODO: Тут нужен индекс страницы
+        raise NotImplementedError
+
+    def load_chars(self, chars_data: pd.Series) -> None:
+        generated_text = "\n".join([f"{char_key}: {char_val}" for char_key, char_val in zip(chars_data.index, chars_data.values)])
+        self.ui.characteristics_label.setText(generated_text)
+
+    def load_page(self, image_path: str, generated_data: pd.DataFrame, page_idx: int, chars_idx: int, description_col: str = "Описание", chars_on_page: int = 4) -> None:
+        # Load image
+        # TODO: Resize image (can be done serverside or in download func)
+        pixmap = QtGui.QPixmap(image_path)
+        self.ui.image_label.setPixmap(pixmap)
+
+        characteristics = generated_data.drop(description_col, axis=0).columns.tolist()
+        cur_characteristics = characteristics[chars_idx:chars_idx + chars_on_page]
+        characteristics_data = generated_data[cur_characteristics].iloc[page_idx].copy()
+        self.load_chars(characteristics_data)
+
+        generated_description = generated_data[description_col].iloc[page_idx].values[0]
+        self.ui.descreption_label.setText(generated_description)
 
     # Add mouse events to the window
+
     def mousePressEvent(self, event):
         self.clickPosition = event.globalPos()
 
-    # # Slide left menu function
+    # Slide left menu function
     # def slideLeftMenu(self):
     #     width = self.ui.left_menu_cont_frame.width()
     #
@@ -111,20 +132,20 @@ class MainWindow(QMainWindow):
     def restore_or_maximize_window(self):
         if self.isMaximized():
             icon2 = QtGui.QIcon()
-            icon2.addPixmap(QtGui.QPixmap(":/newPrefix/images/restore_maximize_2.svg"), QtGui.QIcon.Normal,
-                            QtGui.QIcon.Off)
+            icon2.addPixmap(QtGui.QPixmap(":/newPrefix/images/restore_maximize_2.svg"), QtGui.QIcon.Normal,  # type: ignore
+                            QtGui.QIcon.Off)  # type: ignore
             self.ui.restore_window_button.setIcon(icon2)
             self.showNormal()
         else:
             icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap(":/newPrefix/images/restore_maximize_1.svg"), QtGui.QIcon.Normal,
-                            QtGui.QIcon.Off)
+            icon1.addPixmap(QtGui.QPixmap(":/newPrefix/images/restore_maximize_1.svg"), QtGui.QIcon.Normal,  # type: ignore
+                            QtGui.QIcon.Off)  # type: ignore
             self.ui.restore_window_button.setIcon(icon1)
             self.showMaximized()
 
 
 ##############################################################################################################
-# # EXECUTE APP
+# EXECUTE APP
 ##############################################################################################################
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -132,5 +153,5 @@ if __name__ == "__main__":
     sys.exit(app.exec_())
 
 ##############################################################################################################
-# # END
+# END
 ##############################################################################################################
