@@ -2,7 +2,6 @@ import json
 import pandas as pd
 import re
 import requests
-import time
 
 
 def delete_empty_info(data):
@@ -69,22 +68,8 @@ def reformat_json(j_data):
     return new_json
 
 
-def transform_to_json(df: pd.DataFrame):
-    results = []
-    columns = df.columns
-    for index, row in df.iterrows():
-        dict_json = {}
-        mask = pd.notna(row)
-        row = row[mask]
-        new_columns = columns[mask]
-        for column, unit in zip(new_columns, row):
-            dict_json[column] = unit
-        results.append(dict_json)
-    return results
-
-
 ##############################################################################################################
-def load_and_processing_excel(filename: str):
+def load_and_processing_excel(filename: str):  # загрузка файла и первичная обработка таблицы
     file = filename
     xl = pd.ExcelFile(file)
 
@@ -131,6 +116,7 @@ def load_and_processing_excel(filename: str):
     table["JSONВставки"] = table["JSONВставки"].apply(delete_empty_info)
     table["JSONГабариты"] = table["JSONГабариты"].apply(delete_empty_info)
 
+    table["JSONГабариты"] = table["JSONГабариты"].apply(reformat_json)
     table["Путь к фото"] = table["Путь к фото"].apply(fix_foto_links)
     table["Описание"] = ""
 
@@ -145,6 +131,24 @@ def download_image(link, name):  # link from table["Путь к фото"]  name
     img_file.close()
 
 
-def excel_save(table: pd.DataFrame, path):
+def excel_save(table: pd.DataFrame, path):  # сохраняет таблицу по указанному пути
     table.to_excel(path, index=False)
     return True
+
+
+def transform_to_json(df: pd.DataFrame):  # преобразует таблицу для отправки в api
+    results = []
+    columns = df.columns
+    for index, row in df.iterrows():
+        dict_json = {}
+        mask = pd.notna(row)
+        row = row[mask]
+        new_columns = columns[mask]
+        for column, unit in zip(new_columns, row):
+            dict_json[column] = unit
+        results.append(dict_json)
+    return results
+
+# TEST
+#path = "C:/Users/artem/Documents/Scenery-Vision/one.xlsx"
+#print(load_and_processing_excel(path))
