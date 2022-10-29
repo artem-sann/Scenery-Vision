@@ -19,6 +19,7 @@ class Model(ABC):
 class ModelRuT5(Model):
     def __init__(self):
         super().__init__()
+        self.num_sequences = 3
         self.checkpoint = "sberbank-ai/ruT5-base"
         self.tokenizer = T5Tokenizer.from_pretrained(self.checkpoint)
         self.name_model = "models/t5"
@@ -40,8 +41,9 @@ class ModelRuT5(Model):
             }
             return encodings
 
+        parsed_json = self.parse(json)
         test_columns = ['input_ids', 'attention_mask']
-        dataset_little_test = Dataset.from_pandas(pd.DataFrame(data={"input_text": self.parse(json)}))
+        dataset_little_test = Dataset.from_pandas(pd.DataFrame(data={"input_text": parsed_json}))
         tokenized_test = dataset_little_test.map(add_eos_to_examples)
         tokenized_test = tokenized_test.map(convert_to_features, batched=True)
         tokenized_test.set_format(type='torch', columns=test_columns)
@@ -49,8 +51,16 @@ class ModelRuT5(Model):
         outs = self.model.generate(
             input_ids=tokenized_test['input_ids'].to(device),
             attention_mask=tokenized_test['attention_mask'].to(device),
-            max_length=165)
-        return [{"Описание": self.tokenizer.decode(ids, skip_special_tokens=True).strip()} for ids in outs]
+            max_length=256,
+            do_sample=True,
+            temperature=0.7,
+            top_k=50,
+            top_p=0.95,
+            num_return_sequences=self.num_sequences
+        )
+        decode_outs = [self.tokenizer.decode(ids, skip_special_tokens=True).strip() for ids in outs]
+        return [{"Описание": decode_outs[i * self.num_sequences: i * self.num_sequences + self.num_sequences - 1]} for i in
+                 range(len(parsed_json))]
 
     def parse(self, json):
         results = []
