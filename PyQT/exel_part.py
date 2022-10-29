@@ -10,7 +10,7 @@ def delete_empty_info(data: list) -> list:
     u = 0
     for txt in data:
         for txt_elem in txt:
-            if txt[txt_elem] == "":  # Тут не должно быть индекса?
+            if txt[txt_elem] == "":  # FIXME: Тут не должно быть индекса?
                 to_del.append(txt_elem)
         for p in range(len(to_del)):
             del reformated_data[u][to_del[p]]
