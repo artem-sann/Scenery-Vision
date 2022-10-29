@@ -1,17 +1,11 @@
 ##############################################################################################################
-# # IMPORTS
+# IMPORTS
 ##############################################################################################################
 import sys
-import os
 
-import psutil
-import PySide2extn
-from PyQt5.uic import loadUi
 
 from resources import *
-import PyQt5.QtGui
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import pyqtProperty, QPropertyAnimation
 from PySide2 import *
 
 # IMPORT GUI FILE
@@ -25,7 +19,7 @@ file_name = "hello"
 
 
 ##############################################################################################################
-# # MAIN WINDOW CLASS
+# MAIN WINDOW CLASS
 ##############################################################################################################
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -41,7 +35,7 @@ class MainWindow(QMainWindow):
         # Set window title and icon
         # These title and icon will not appear on our app because we removed the title bar
         self.setWindowTitle("UTIL Manager")
-        # # self.setWindowIcon("")
+        # self.setWindowIcon("")
 
         # Cheat buttons
         self.ui.exel_page_button.clicked.connect(lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.exel_page))
@@ -75,7 +69,7 @@ class MainWindow(QMainWindow):
 
         self.ui.top_header.mouseMoveEvent = moveWindow
         #
-        # # Left menu toggle button (Show/hide menu labels)
+        # Left menu toggle button (Show/hide menu labels)
         # self.ui.pushButton.clicked.connect(lambda: self.slideLeftMenu())
 
         self.show()
@@ -85,12 +79,12 @@ class MainWindow(QMainWindow):
         global file_name
         file_name = QFileDialog.getOpenFileName(self, 'open file', 'C:', 'XLSX files (*xlsx)')
 
-
     # Add mouse events to the window
+
     def mousePressEvent(self, event):
         self.clickPosition = event.globalPos()
 
-    # # Slide left menu function
+    # Slide left menu function
     # def slideLeftMenu(self):
     #     width = self.ui.left_menu_cont_frame.width()
     #
@@ -124,7 +118,7 @@ class MainWindow(QMainWindow):
 
 
 ##############################################################################################################
-# # EXECUTE APP
+# EXECUTE APP
 ##############################################################################################################
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -132,5 +126,5 @@ if __name__ == "__main__":
     sys.exit(app.exec_())
 
 ##############################################################################################################
-# # END
+# END
 ##############################################################################################################

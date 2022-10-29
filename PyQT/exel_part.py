@@ -2,26 +2,25 @@ import json
 import pandas as pd
 import re
 import requests
-import time
 
 
-def delete_empty_info(data):
+def delete_empty_info(data: list) -> list:
     to_del = []
-    data1 = data
+    reformated_data = data.copy()
     u = 0
     for txt in data:
-        for txt1 in txt:
-            if txt[txt1] == "":
-                to_del.append(txt1)
+        for txt_elem in txt:
+            if txt[txt_elem] == "":  # Тут не должно быть индекса?
+                to_del.append(txt_elem)
         for p in range(len(to_del)):
-            del data1[u][to_del[p]]
+            del reformated_data[u][to_del[p]]
         to_del.clear()
         u = u + 1
 
-    return data1
+    return reformated_data
 
 
-def delete_useless_info(data):
+def delete_useless_info(data: list) -> list:
     j = 0
     for txt in data:
         if txt["Свойство"] == "ИД товара на площадке Tmall" or txt["Свойство"] == "Код ролика на YouTube":
@@ -30,7 +29,7 @@ def delete_useless_info(data):
     return data
 
 
-def filter_camel_for_text(text):
+def filter_camel_for_text(text: str) -> str:
     if "JSON" in text:
         return text
     result = text[0].upper()
@@ -41,26 +40,26 @@ def filter_camel_for_text(text):
     return result
 
 
-def filter_camel_for_json(json):
-    for unit in json:
+def filter_camel_for_json(json_to_reformat: list) -> list:
+    for unit in json_to_reformat:
         for key in unit.copy():
             unit[filter_camel_for_text(key)] = unit.pop(key)
-    return json
+    return json_to_reformat
 
 
-def remove_text_between_parens(text):
+def remove_text_between_parens(text: str) -> str:
     n = 1
     while n:
         text, n = re.subn(r'\([^()]*\)', '', text)
     return text
 
 
-def fix_foto_links(link):
+def fix_foto_links(link: str) -> str:
     link = link.replace(chr(92), "/")
     return link
 
 
-def reformat_json(j_data):
+def reformat_json(j_data: list) -> dict:
     new_json = {}
     for unit in j_data:
         if len(unit) == 2 and "Свойство" in unit and "Значение" in unit:
@@ -69,22 +68,8 @@ def reformat_json(j_data):
     return new_json
 
 
-def transform_to_json(df: pd.DataFrame):
-    results = []
-    columns = df.columns
-    for index, row in df.iterrows():
-        dict_json = {}
-        mask = pd.notna(row)
-        row = row[mask]
-        new_columns = columns[mask]
-        for column, unit in zip(new_columns, row):
-            dict_json[column] = unit
-        results.append(dict_json)
-    return results
-
-
 ##############################################################################################################
-def load_and_processing_excel(filename: str):
+def load_and_processing_excel(filename: str) -> pd.DataFrame:  # загрузка файла и первичная обработка таблицы
     file = filename
     xl = pd.ExcelFile(file)
 
@@ -131,13 +116,14 @@ def load_and_processing_excel(filename: str):
     table["JSONВставки"] = table["JSONВставки"].apply(delete_empty_info)
     table["JSONГабариты"] = table["JSONГабариты"].apply(delete_empty_info)
 
+    table["JSONГабариты"] = table["JSONГабариты"].apply(reformat_json)
     table["Путь к фото"] = table["Путь к фото"].apply(fix_foto_links)
     table["Описание"] = ""
 
     return table  # return dataframe table
 
 
-def download_image(link, name):  # link from table["Путь к фото"]  name from table['Наименование']
+def download_image(link: str, name: str) -> None:  # link from table["Путь к фото"]  name from table['Наименование']
     img = requests.get(link)
     locate = './jewelry_images' + str(name) + '.jpg'
     img_file = open(locate, 'wb')
@@ -145,6 +131,29 @@ def download_image(link, name):  # link from table["Путь к фото"]  name
     img_file.close()
 
 
-def excel_save(table: pd.DataFrame, path):
+def excel_save(table: pd.DataFrame, path: str) -> bool:  # сохраняет таблицу по указанному пути
     table.to_excel(path, index=False)
     return True
+
+
+def transform_to_json(df: pd.DataFrame) -> list:  # преобразует таблицу для отправки в api
+    results = []
+    columns = df.columns
+    for _, row in df.iterrows():
+        dict_json = {}
+        mask = pd.notna(row)
+        row = row[mask]
+        new_columns = columns[mask]
+        for column, unit in zip(new_columns, row):
+            dict_json[column] = unit
+        results.append(dict_json)
+    return results
+
+
+def load_data(image_path: str) -> None:
+    raise NotImplementedError
+
+
+# TEST
+# path = "C:/Users/artem/Documents/Scenery-Vision/one.xlsx"
+# print(load_and_processing_excel(path))
