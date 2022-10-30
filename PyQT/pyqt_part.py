@@ -7,7 +7,7 @@ import time
 from PyQt5.QtGui import QFont
 
 import Thread
-from exel_part import download_image
+from exel_part import download_image, excel_save
 from resources import *
 from PyQt5.QtWidgets import *
 from PySide2 import *
@@ -18,28 +18,17 @@ from interface import *
 from qt_material import *
 import pandas as pd
 
-from Thread import APIThread, glob_size, load_flag
+from Thread import APIThread, final_data, f_data_cnt, first_load_flag
 
 ##############################################################################################################
 # # MAIN WINDOW CLASS
 ##############################################################################################################
-global page_index
+
 page_index = 0
-global char_index
 char_index = 0
-global desc_index
+
 desc_index = 0
 
-final_data = pd.DataFrame()
-
-
-def update_data(data):  # Получение данных с обновлением API
-    global final_data
-    final_data = final_data.append(data, ignore_index=True)
-
-    print(final_data)
-    print(glob_size)
-    #TODO Добавить в очередь полученные куски таблицы
 
 
 class MainWindow(QMainWindow):
@@ -83,7 +72,7 @@ class MainWindow(QMainWindow):
         # # self.setWindowIcon("")
 
         self.api_thread = APIThread()
-        self.api_thread.update_api_data.connect(update_data)
+        self.ui.title_label.setText("ddddddddddddddd")
 
 
         # Hiding unnecessary buttons
@@ -135,61 +124,77 @@ class MainWindow(QMainWindow):
             while not Thread.load_flag:
                 print("ждемс")
                 print(Thread.load_flag)
-            self.ui.stackedWidget.setCurrentWidget(self.ui.main_page)
+
+            self.ui.stackedWidget.setCurrentIndex(1)
+            self.load_page(download_image(Thread.final_data["Путь к фото"][page_index],
+            Thread.final_data["Наименование"][page_index]), Thread.final_data, page_index, 0, 0)
 
     def save_files(self):
         file_name = QFileDialog.getSaveFileName(self, 'save file', 'C:', 'XLSX files (*xlsx)')[0]
-        if file_name != "":
-            self.api_thread.reset_file(file_name)
-            self.api_thread.start()
-            while not Thread.load_flag:
-                print("ждемс")
-                time.sleep(1)
-                print(Thread.load_flag)
-            self.ui.stackedWidget.setCurrentWidget(self.ui.main_page)
+        excel_save(Thread.final_data, file_name)
+
 
     def change_page_left(self):  # left
         global page_index
+        print(page_index)
         if page_index > 0:
             page_index = page_index - 1
-            print("left")
+            print(page_index)
+            self.load_page(download_image(Thread.final_data["Путь к фото"][page_index],
+                                          Thread.final_data["Наименование"][page_index]), Thread.final_data, page_index,
+                           0, 0)
 
-
-    def change_page_right(self):   # Right
+    def change_page_right(self):  # Right
         global page_index
-        if page_index < glob_size:
+
+        print(page_index)
+        if page_index < 15:
             page_index = page_index + 1
-            print("Right")
+            print(page_index)
+            self.load_page(download_image(Thread.final_data["Путь к фото"][page_index],
+                                          Thread.final_data["Наименование"][page_index]), Thread.final_data, page_index,
+                           0, 0)
 
 
 
     def load_chars(self, chars_data: pd.Series) -> None:
-        generated_text = "\n".join([f"{char_key}: {char_val}" for char_key, char_val in zip(chars_data.index, chars_data.values)])
+        generated_text = "\n".join(
+            [f"{char_key}: {char_val}" for char_key, char_val in zip(chars_data.index, chars_data.values)])
         self.ui.characteristics_label.setText(generated_text)
+        self.ui.characteristics_label.setWordWrap(True)
 
     def load_description(self, description_data: pd.Series, description_idx: int) -> None:
         generated_description = description_data.values[description_idx]
-        self.ui.descreption_label.setText(generated_description)  # type: ignore
+        self.ui.descreption_label.setText(generated_description)   # type: ignore
+        self.ui.descreption_label.setWordWrap(True)
 
     def load_page(
-        self, image_path: str,
-        generated_data: pd.DataFrame,
-        page_idx: int, chars_idx: int,
-        description_idx: int,
-        description_col: str = "Описание",
-        chars_on_page: int = 4
+            self, image_path: str,
+            generated_data: pd.DataFrame,
+            page_idx: int, chars_idx: int,
+            description_idx: int,
+            description_col: str = "Описание",
+            chars_on_page: int = 4
     ) -> None:
+        print("вошел в функцию")
         # Load image
         # TODO: Resize image (can be done serverside or in download func)
         pixmap = QtGui.QPixmap(image_path)
         self.ui.image_label.setPixmap(pixmap)
+        print("тчк 1")
+        self.ui.title_label.setText(generated_data["Наименование для сайта"][page_idx])
+        self.ui.title_label.setWordWrap(True)
 
-        characteristics = generated_data.drop(description_col, axis=0).columns.tolist()
+        characteristics = generated_data.drop(description_col, axis=1).columns.tolist()
+
+        print("тчк 2")
         cur_characteristics = characteristics[chars_idx:chars_idx + chars_on_page]
         characteristics_data = generated_data[cur_characteristics].iloc[page_idx].copy()
         self.load_chars(characteristics_data)
-        self.load_description(description_data=generated_data[description_col].iloc[page_idx], description_idx=description_idx)
-
+        print("тчк 3")
+        self.load_description(description_data=generated_data[description_col],
+                              description_idx=description_idx)
+        print("тчк 4")
     # Add mouse events to the window
 
     def mousePressEvent(self, event):
