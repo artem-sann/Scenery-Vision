@@ -26,7 +26,6 @@ from Thread import APIThread, final_data, f_data_cnt, first_load_flag
 
 page_index = 0
 char_index = 0
-
 desc_index = 0
 
 
@@ -111,14 +110,13 @@ class MainWindow(QMainWindow):
 
         self.show()
 
-
-
-
     # Browse files function
     def browse_files(self):
+        self.ui.stackedWidget.setCurrentWidget(self.ui.exel_page)
         file_name = QFileDialog.getOpenFileName(self, 'open file', 'C:', 'XLSX files (*xlsx)')[0]
+        self.ui.stackedWidget.setCurrentWidget(self.ui.loading_page)
         if file_name != "":
-            self.ui.stackedWidget.setCurrentWidget(self.ui.loading_page)
+
             self.api_thread.reset_file(file_name)
             self.api_thread.start()
             while not Thread.load_flag:
@@ -128,9 +126,14 @@ class MainWindow(QMainWindow):
             self.ui.stackedWidget.setCurrentIndex(1)
             self.load_page(download_image(Thread.final_data["Путь к фото"][page_index],
             Thread.final_data["Наименование"][page_index]), Thread.final_data, page_index, 0, 0)
+        else:
+            self.ui.stackedWidget.setCurrentWidget(self.ui.exel_page)
+
 
     def save_files(self):
-        file_name = QFileDialog.getSaveFileName(self, 'save file', 'C:', 'XLSX files (*xlsx)')[0]
+        file_name = QFileDialog.getSaveFileName(self, 'save file', 'C:', 'XLSX files (*xlsx)')[0] + '.xlsx'
+        print(file_name)
+        print(Thread.final_data)
         excel_save(Thread.final_data, file_name)
 
 
@@ -176,25 +179,20 @@ class MainWindow(QMainWindow):
             description_col: str = "Описание",
             chars_on_page: int = 4
     ) -> None:
-        print("вошел в функцию")
         # Load image
         # TODO: Resize image (can be done serverside or in download func)
         pixmap = QtGui.QPixmap(image_path)
         self.ui.image_label.setPixmap(pixmap)
-        print("тчк 1")
         self.ui.title_label.setText(generated_data["Наименование для сайта"][page_idx])
         self.ui.title_label.setWordWrap(True)
 
         characteristics = generated_data.drop(description_col, axis=1).columns.tolist()
-
-        print("тчк 2")
         cur_characteristics = characteristics[chars_idx:chars_idx + chars_on_page]
         characteristics_data = generated_data[cur_characteristics].iloc[page_idx].copy()
         self.load_chars(characteristics_data)
-        print("тчк 3")
         self.load_description(description_data=generated_data[description_col],
                               description_idx=description_idx)
-        print("тчк 4")
+
     # Add mouse events to the window
 
     def mousePressEvent(self, event):
