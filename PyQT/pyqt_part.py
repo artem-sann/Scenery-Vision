@@ -18,19 +18,28 @@ from interface import *
 from qt_material import *
 import pandas as pd
 
-from Thread import APIThread, final_data, f_data_cnt, first_load_flag
+from Thread import APIThread, glob_size, load_flag
 
 ##############################################################################################################
 # # MAIN WINDOW CLASS
 ##############################################################################################################
-
+global page_index
 page_index = 0
+global char_index
 char_index = 0
-
+global desc_index
 desc_index = 0
 
+final_data = pd.DataFrame()
 
 
+def update_data(data):  # Получение данных с обновлением API
+    global final_data
+    final_data = final_data.append(data, ignore_index=True)
+
+    print(final_data)
+    print(glob_size)
+    #TODO Добавить в очередь полученные куски таблицы
 
 
 class MainWindow(QMainWindow):
@@ -67,20 +76,15 @@ class MainWindow(QMainWindow):
         ################################################################################################################
         # Remove window title bar
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)  # type: ignore
-        self.ui.stackedWidget.setCurrentIndex(0)
+        self.ui.stackedWidget.setCurrentWidget(self.ui.exel_page)
         # Set window title and icon
         # These title and icon will not appear on our app because we removed the title bar
         self.setWindowTitle("Scenery Vision")
         # # self.setWindowIcon("")
 
         self.api_thread = APIThread()
-        #self.api_thread.update_api_data.connect(self.update_data)
+        self.api_thread.update_api_data.connect(update_data)
 
-        # Cheat buttons
-        self.ui.exel_page_button.clicked.connect(lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.exel_page))
-        self.ui.main_page_button.clicked.connect(lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.main_page))
-        self.ui.loading_page_button.clicked.connect(
-            lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.loading_page))
 
         # Hiding unnecessary buttons
         # self.ui.add_button.hide()
@@ -101,6 +105,8 @@ class MainWindow(QMainWindow):
 
         # Add button
         self.ui.add_button.clicked.connect(self.browse_files)
+        # Add button
+        self.ui.download_button.clicked.connect(self.save_files)
 
         # Function to Move window on mouse drag event on the title bar
         def moveWindow(e):
@@ -129,105 +135,74 @@ class MainWindow(QMainWindow):
             while not Thread.load_flag:
                 print("ждемс")
                 print(Thread.load_flag)
+            self.ui.stackedWidget.setCurrentWidget(self.ui.main_page)
 
-            self.ui.stackedWidget.setCurrentIndex(1)
-            self.load_page(download_image(Thread.final_data["Путь к фото"][page_index],
-            Thread.final_data["Наименование"][page_index]), Thread.final_data, page_index, 0, 0)
+    def save_files(self):
+        file_name = QFileDialog.getSaveFileName(self, 'save file', 'C:', 'XLSX files (*xlsx)')[0]
+        if file_name != "":
+            self.api_thread.reset_file(file_name)
+            self.api_thread.start()
+            while not Thread.load_flag:
+                print("ждемс")
+                time.sleep(1)
+                print(Thread.load_flag)
+            self.ui.stackedWidget.setCurrentWidget(self.ui.main_page)
 
     def change_page_left(self):  # left
         global page_index
-        print(page_index)
         if page_index > 0:
             page_index = page_index - 1
-            print(page_index)
-            self.load_page(download_image(Thread.final_data["Путь к фото"][page_index],
-                                          Thread.final_data["Наименование"][page_index]), Thread.final_data, page_index, 0, 0)
+            print("left")
 
 
-    def change_page_right(self):  # Right
+    def change_page_right(self):   # Right
         global page_index
-
-        print(page_index)
-        if page_index < 15:
+        if page_index < glob_size:
             page_index = page_index + 1
-            print(page_index)
-            self.load_page(download_image(Thread.final_data["Путь к фото"][page_index],
-                                          Thread.final_data["Наименование"][page_index]), Thread.final_data, page_index, 0, 0)
+            print("Right")
+
 
 
     def load_chars(self, chars_data: pd.Series) -> None:
-        generated_text = "\n".join(
-            [f"{char_key}: {char_val}" for char_key, char_val in zip(chars_data.index, chars_data.values)])
+        generated_text = "\n".join([f"{char_key}: {char_val}" for char_key, char_val in zip(chars_data.index, chars_data.values)])
         self.ui.characteristics_label.setText(generated_text)
-        self.ui.characteristics_label.setWordWrap(True)
 
     def load_description(self, description_data: pd.Series, description_idx: int) -> None:
         generated_description = description_data.values[description_idx]
-        self.ui.descreption_label.setText(generated_description)   # type: ignore
-        self.ui.descreption_label.setWordWrap(True)
+        self.ui.descreption_label.setText(generated_description)  # type: ignore
 
     def load_page(
-            self, image_path: str,
-            generated_data: pd.DataFrame,
-            page_idx: int, chars_idx: int,
-            description_idx: int,
-            description_col: str = "Описание",
-            chars_on_page: int = 4
+        self, image_path: str,
+        generated_data: pd.DataFrame,
+        page_idx: int, chars_idx: int,
+        description_idx: int,
+        description_col: str = "Описание",
+        chars_on_page: int = 4
     ) -> None:
-        print("вошел в функцию")
         # Load image
         # TODO: Resize image (can be done serverside or in download func)
         pixmap = QtGui.QPixmap(image_path)
         self.ui.image_label.setPixmap(pixmap)
-        print("тчк 1")
 
-        characteristics = generated_data.drop(description_col, axis=1).columns.tolist()
-
-        print("тчк 2")
+        characteristics = generated_data.drop(description_col, axis=0).columns.tolist()
         cur_characteristics = characteristics[chars_idx:chars_idx + chars_on_page]
         characteristics_data = generated_data[cur_characteristics].iloc[page_idx].copy()
         self.load_chars(characteristics_data)
-        print("тчк 3")
-        self.load_description(description_data=generated_data[description_col],
-                              description_idx=description_idx)
-        print("тчк 4")
+        self.load_description(description_data=generated_data[description_col].iloc[page_idx], description_idx=description_idx)
+
     # Add mouse events to the window
 
     def mousePressEvent(self, event):
         self.clickPosition = event.globalPos()
 
-    # # Slide left menu function
-    # def slideLeftMenu(self):
-    #     width = self.ui.left_menu_cont_frame.width()
-    #
-    #     if width == 40:
-    #         newWidth = 200
-    #     else:
-    #         newWidth = 40
-    #
-    #     self.animation = QPropertyAnimation(self.ui.left_menu_cont_frame, b"minimumWidth")
-    #     self.animation.setDuration(250)
-    #     self.animation.setStartValue(width)
-    #     self.animation.setEndValue(newWidth)
-    #     self.animation.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-    #     self.animation.start()
-
     # Update restore button icon on maximizing or minimizing window
     # Also it is possible to add changing icon on the button
     def restore_or_maximize_window(self):
         if self.isMaximized():
-            icon2 = QtGui.QIcon()
-            icon2.addPixmap(QtGui.QPixmap(":/newPrefix/images/restore_maximize_2.svg"), QtGui.QIcon.Normal,
-                            # type: ignore
-                            QtGui.QIcon.Off)  # type: ignore
-            self.ui.restore_window_button.setIcon(icon2)
+            self.ui.restore_window_button.setStyleSheet("QPushButton#restore_window_button {\nwidth: 30px;\nheight: 30px;\nborder-image: url(:/newPrefix/images/restore_maximize_2.svg);\n}\nQPushButton#restore_window_button::hover {\nwidth: 30px;\nheight: 30px;\nbackground-color: rgb(85, 170, 255);\nborder-image: url(:/newPrefix/images/restore_maximize_2.svg);\n}")
             self.showNormal()
         else:
-            icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap(":/newPrefix/images/restore_maximize_1.svg"), QtGui.QIcon.Normal,
-                            # type: ignore
-                            QtGui.QIcon.Off)  # type: ignore
-            self.ui.restore_window_button.setIcon(icon1)
+            self.ui.restore_window_button.setStyleSheet("QPushButton#restore_window_button {\nwidth: 30px;\nheight: 30px;\nborder-image: url(:/newPrefix/images/restore_maximize_1.svg);\n}\nQPushButton#restore_window_button::hover {\nwidth: 30px;\nheight: 30px;\nbackground-color: rgb(85, 170, 255);\nborder-image: url(:/newPrefix/images/restore_maximize_1.svg);\n}")
             self.showMaximized()
 
 

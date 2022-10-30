@@ -33,8 +33,7 @@ class Ui_MainWindow(object):
         MainWindow.setDocumentMode(False)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setStyleSheet("QWidget#centralwidget {\n"
-"    \n"
-"    background-image: url(:/newPrefix/images/main_backround.png);\n"
+"    border-image: url(:/newPrefix/images/main_backround.png);\n"
 "}")
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -54,7 +53,7 @@ class Ui_MainWindow(object):
         self.header.setLineWidth(0)
         self.header.setObjectName("header")
         self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.header)
-        self.verticalLayout_8.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_8.setContentsMargins(10, 0, 0, 0)
         self.verticalLayout_8.setSpacing(0)
         self.verticalLayout_8.setObjectName("verticalLayout_8")
         self.top_header = QtWidgets.QFrame(self.header)
@@ -63,7 +62,7 @@ class Ui_MainWindow(object):
         self.top_header.setFrameShadow(QtWidgets.QFrame.Raised)
         self.top_header.setObjectName("top_header")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.top_header)
-        self.horizontalLayout.setContentsMargins(-1, -1, -1, 0)
+        self.horizontalLayout.setContentsMargins(-1, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.frame_with_window_buttons = QtWidgets.QFrame(self.top_header)
         self.frame_with_window_buttons.setMinimumSize(QtCore.QSize(0, 0))
@@ -72,49 +71,60 @@ class Ui_MainWindow(object):
         self.frame_with_window_buttons.setObjectName("frame_with_window_buttons")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frame_with_window_buttons)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_2.setSpacing(12)
+        self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.pushButton_5 = QtWidgets.QPushButton(self.frame_with_window_buttons)
-        self.pushButton_5.setStyleSheet("")
-        self.pushButton_5.setText("")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/newPrefix/images/restore_maximize_1.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_5.setIcon(icon1)
-        self.pushButton_5.setIconSize(QtCore.QSize(32, 32))
-        self.pushButton_5.setAutoRepeat(False)
-        self.pushButton_5.setObjectName("pushButton_5")
-        self.horizontalLayout_2.addWidget(self.pushButton_5)
         self.minimize_window_button = QtWidgets.QPushButton(self.frame_with_window_buttons)
-        self.minimize_window_button.setStyleSheet("QPushButton#minimize_window_button::hover {\n"
-"    background-color: rgb(17, 164, 255);\n"
+        self.minimize_window_button.setStyleSheet("QPushButton#minimize_window_button {\n"
+"    width: 30px;\n"
+"    height: 30px;\n"
+"    \n"
+"    border-image: url(:/newPrefix/images/minimize.svg);\n"
+"}\n"
+"\n"
+"QPushButton#minimize_window_button::hover {\n"
+"    width: 30px;\n"
+"    height: 30px;\n"
+"    \n"
+"    background-color: rgb(85, 170, 255);\n"
+"    border-image: url(:/newPrefix/images/minimize.svg);\n"
 "}")
         self.minimize_window_button.setText("")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(":/newPrefix/images/minimize.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.minimize_window_button.setIcon(icon2)
         self.minimize_window_button.setObjectName("minimize_window_button")
         self.horizontalLayout_2.addWidget(self.minimize_window_button)
         self.restore_window_button = QtWidgets.QPushButton(self.frame_with_window_buttons)
-        self.restore_window_button.setStyleSheet("QPushButton#restore_window_button::hover {\n"
-"    background-color: rgb(17, 164, 255);\n"
+        self.restore_window_button.setStyleSheet("QPushButton#restore_window_button {\n"
+"    width: 30px;\n"
+"    height: 30px;\n"
+"    border-image: url(:/newPrefix/images/restore_maximize_2.svg);\n"
+"}\n"
+"\n"
+"QPushButton#restore_window_button::hover {\n"
+"    width: 30px;\n"
+"    height: 30px;\n"
+"    \n"
+"    background-color: rgb(85, 170, 255);\n"
+"    border-image: url(:/newPrefix/images/restore_maximize_2.svg);\n"
 "}")
         self.restore_window_button.setText("")
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap(":/newPrefix/images/restore_maximize_2.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.restore_window_button.setIcon(icon3)
         self.restore_window_button.setObjectName("restore_window_button")
-        self.horizontalLayout_2.addWidget(self.restore_window_button)
+        self.horizontalLayout_2.addWidget(self.restore_window_button, 0, QtCore.Qt.AlignRight)
         self.close_window_button = QtWidgets.QPushButton(self.frame_with_window_buttons)
-        self.close_window_button.setEnabled(True)
-        self.close_window_button.setStyleSheet("QPushButton#close_window_button::hover {\n"
+        self.close_window_button.setStyleSheet("QPushButton#close_window_button {\n"
+"    width: 30px;\n"
+"    height: 30px;\n"
+"    \n"
+"    border-image: url(:/newPrefix/images/close.svg);\n"
+"}\n"
+"\n"
+"QPushButton#close_window_button::hover {\n"
+"    width: 30px;\n"
+"    height: 30px;\n"
 "    background-color: rgb(255, 0, 0);\n"
+"    border-image: url(:/newPrefix/images/close.svg);\n"
 "}")
         self.close_window_button.setText("")
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap(":/newPrefix/images/Close.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.close_window_button.setIcon(icon4)
         self.close_window_button.setObjectName("close_window_button")
-        self.horizontalLayout_2.addWidget(self.close_window_button)
+        self.horizontalLayout_2.addWidget(self.close_window_button, 0, QtCore.Qt.AlignRight)
         self.horizontalLayout.addWidget(self.frame_with_window_buttons, 0, QtCore.Qt.AlignRight)
         self.verticalLayout_8.addWidget(self.top_header)
         self.frame_3 = QtWidgets.QFrame(self.header)
@@ -126,7 +136,8 @@ class Ui_MainWindow(object):
         self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_3.setObjectName("frame_3")
         self.horizontalLayout_12 = QtWidgets.QHBoxLayout(self.frame_3)
-        self.horizontalLayout_12.setContentsMargins(-1, 0, -1, 15)
+        self.horizontalLayout_12.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_12.setSpacing(0)
         self.horizontalLayout_12.setObjectName("horizontalLayout_12")
         self.left_header_frame_with_buttons = QtWidgets.QFrame(self.frame_3)
         self.left_header_frame_with_buttons.setStyleSheet("")
@@ -139,18 +150,27 @@ class Ui_MainWindow(object):
         self.horizontalLayout_9.setObjectName("horizontalLayout_9")
         self.add_button = QtWidgets.QPushButton(self.left_header_frame_with_buttons)
         self.add_button.setAutoFillBackground(False)
+        self.add_button.setStyleSheet("QPushButton#add_button::hover {\n"
+"    background-color: rgb(255, 255, 255);\n"
+"    border-radius:  17px;\n"
+"}\n"
+"")
         self.add_button.setText("")
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(":/newPrefix/images/add.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.add_button.setIcon(icon5)
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/newPrefix/images/add.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.add_button.setIcon(icon1)
         self.add_button.setIconSize(QtCore.QSize(60, 60))
         self.add_button.setObjectName("add_button")
         self.horizontalLayout_9.addWidget(self.add_button)
         self.download_button = QtWidgets.QPushButton(self.left_header_frame_with_buttons)
+        self.download_button.setStyleSheet("QPushButton#download_button::hover {\n"
+"    background-color: rgb(255, 255, 255);\n"
+"    border-radius:  17px;\n"
+"}")
         self.download_button.setText("")
-        icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap(":/newPrefix/images/download.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.download_button.setIcon(icon6)
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(":/newPrefix/images/download.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.download_button.setIcon(icon2)
         self.download_button.setIconSize(QtCore.QSize(60, 60))
         self.download_button.setObjectName("download_button")
         self.horizontalLayout_9.addWidget(self.download_button)
@@ -180,15 +200,6 @@ class Ui_MainWindow(object):
         self.right_header_frame_with_buttons.setObjectName("right_header_frame_with_buttons")
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.right_header_frame_with_buttons)
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        self.exel_page_button = QtWidgets.QPushButton(self.right_header_frame_with_buttons)
-        self.exel_page_button.setObjectName("exel_page_button")
-        self.horizontalLayout_8.addWidget(self.exel_page_button)
-        self.main_page_button = QtWidgets.QPushButton(self.right_header_frame_with_buttons)
-        self.main_page_button.setObjectName("main_page_button")
-        self.horizontalLayout_8.addWidget(self.main_page_button)
-        self.loading_page_button = QtWidgets.QPushButton(self.right_header_frame_with_buttons)
-        self.loading_page_button.setObjectName("loading_page_button")
-        self.horizontalLayout_8.addWidget(self.loading_page_button)
         self.horizontalLayout_12.addWidget(self.right_header_frame_with_buttons)
         self.verticalLayout_8.addWidget(self.frame_3)
         self.verticalLayout.addWidget(self.header)
@@ -210,11 +221,25 @@ class Ui_MainWindow(object):
         self.exel_button.setAcceptDrops(False)
         self.exel_button.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.exel_button.setAutoFillBackground(False)
-        self.exel_button.setStyleSheet("")
+        self.exel_button.setStyleSheet("QPushButton#exel_button {\n"
+"    width: 300px;\n"
+"    height: 300px;\n"
+"    \n"
+"    border-image: url(:/newPrefix/images/add_exel.svg);\n"
+"}\n"
+"\n"
+"QPushButton#exel_button::hover {\n"
+"    width: 320px;\n"
+"    height: 320px;\n"
+"    border-image: url(:/newPrefix/images/add_exel_hover.svg);\n"
+"}\n"
+"\n"
+"QPushButton#exel_button::pressed {\n"
+"    width: 320px;\n"
+"    height: 320px;\n"
+"    border-image: url(:/newPrefix/images/add_exel_pressed.svg);\n"
+"}")
         self.exel_button.setText("")
-        icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap(":/newPrefix/images/add_exel.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.exel_button.setIcon(icon7)
         self.exel_button.setIconSize(QtCore.QSize(300, 300))
         self.exel_button.setCheckable(False)
         self.exel_button.setAutoDefault(False)
@@ -241,7 +266,7 @@ class Ui_MainWindow(object):
         self.left_arrow_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.left_arrow_frame.setObjectName("left_arrow_frame")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.left_arrow_frame)
-        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_3.setContentsMargins(10, 0, 10, 0)
         self.verticalLayout_3.setSpacing(0)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.left_arrow_button = QtWidgets.QPushButton(self.left_arrow_frame)
@@ -250,11 +275,26 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.left_arrow_button.sizePolicy().hasHeightForWidth())
         self.left_arrow_button.setSizePolicy(sizePolicy)
-        self.left_arrow_button.setStyleSheet("")
+        self.left_arrow_button.setStyleSheet("QPushButton#left_arrow_button {\n"
+"    width: 80px;\n"
+"    height: 250px;\n"
+"    \n"
+"    border-image: url(:/newPrefix/images/arrow_to_left.svg);\n"
+"}\n"
+"\n"
+"QPushButton#left_arrow_button::hover {\n"
+"    width: 80px;\n"
+"    height: 250px;\n"
+"    \n"
+"    border-image: url(:/newPrefix/images/arrow_to_left_hover.svg);\n"
+"}\n"
+"\n"
+"QPushButton#left_arrow_button::pressed {\n"
+"    width: 80px;\n"
+"    height: 250px;\n"
+"    border-image: url(:/newPrefix/images/arrow_to_left_pressed.svg);\n"
+"}")
         self.left_arrow_button.setText("")
-        icon8 = QtGui.QIcon()
-        icon8.addPixmap(QtGui.QPixmap(":/newPrefix/images/arrow_to_left.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.left_arrow_button.setIcon(icon8)
         self.left_arrow_button.setIconSize(QtCore.QSize(100, 200))
         self.left_arrow_button.setObjectName("left_arrow_button")
         self.verticalLayout_3.addWidget(self.left_arrow_button, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
@@ -366,7 +406,6 @@ class Ui_MainWindow(object):
         font.setFamily("Mulish")
         font.setPointSize(12)
         font.setBold(True)
-        font.setWeight(75)
         self.label_2.setFont(font)
         self.label_2.setStyleSheet("color: rgb(0, 0, 0);")
         self.label_2.setObjectName("label_2")
@@ -397,45 +436,20 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.buttons_frame)
         self.horizontalLayout_3.setSpacing(30)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.characteristics_button_1 = QtWidgets.QPushButton(self.buttons_frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.characteristics_button_1.sizePolicy().hasHeightForWidth())
-        self.characteristics_button_1.setSizePolicy(sizePolicy)
-        self.characteristics_button_1.setText("")
-        icon9 = QtGui.QIcon()
-        icon9.addPixmap(QtGui.QPixmap(":/newPrefix/images/pushed_circle_button.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.characteristics_button_1.setIcon(icon9)
-        self.characteristics_button_1.setIconSize(QtCore.QSize(25, 25))
-        self.characteristics_button_1.setDefault(True)
-        self.characteristics_button_1.setFlat(False)
-        self.characteristics_button_1.setObjectName("characteristics_button_1")
-        self.horizontalLayout_3.addWidget(self.characteristics_button_1)
-        self.characteristics_button_2 = QtWidgets.QPushButton(self.buttons_frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.characteristics_button_2.sizePolicy().hasHeightForWidth())
-        self.characteristics_button_2.setSizePolicy(sizePolicy)
-        self.characteristics_button_2.setText("")
-        icon10 = QtGui.QIcon()
-        icon10.addPixmap(QtGui.QPixmap(":/newPrefix/images/circle_button.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.characteristics_button_2.setIcon(icon10)
-        self.characteristics_button_2.setIconSize(QtCore.QSize(25, 25))
-        self.characteristics_button_2.setObjectName("characteristics_button_2")
-        self.horizontalLayout_3.addWidget(self.characteristics_button_2)
-        self.characteristics_button_3 = QtWidgets.QPushButton(self.buttons_frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.characteristics_button_3.sizePolicy().hasHeightForWidth())
-        self.characteristics_button_3.setSizePolicy(sizePolicy)
-        self.characteristics_button_3.setText("")
-        self.characteristics_button_3.setIcon(icon10)
-        self.characteristics_button_3.setIconSize(QtCore.QSize(25, 25))
-        self.characteristics_button_3.setObjectName("characteristics_button_3")
-        self.horizontalLayout_3.addWidget(self.characteristics_button_3)
+        self.characteristic_button_1 = QtWidgets.QRadioButton(self.buttons_frame)
+        self.characteristic_button_1.setStyleSheet("")
+        self.characteristic_button_1.setText("")
+        self.characteristic_button_1.setObjectName("characteristic_button_1")
+        self.horizontalLayout_3.addWidget(self.characteristic_button_1)
+        self.characteristic_button_2 = QtWidgets.QRadioButton(self.buttons_frame)
+        self.characteristic_button_2.setText("")
+        self.characteristic_button_2.setObjectName("characteristic_button_2")
+        self.horizontalLayout_3.addWidget(self.characteristic_button_2)
+        self.characteristic_button_3 = QtWidgets.QRadioButton(self.buttons_frame)
+        self.characteristic_button_3.setText("")
+        self.characteristic_button_3.setIconSize(QtCore.QSize(25, 25))
+        self.characteristic_button_3.setObjectName("characteristic_button_3")
+        self.horizontalLayout_3.addWidget(self.characteristic_button_3)
         self.verticalLayout_10.addWidget(self.buttons_frame, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignBottom)
         self.horizontalLayout_6.addWidget(self.characteristics_frame)
         self.verticalLayout_7.addWidget(self.first_line)
@@ -469,7 +483,6 @@ class Ui_MainWindow(object):
         font.setFamily("Mulish")
         font.setPointSize(12)
         font.setBold(True)
-        font.setWeight(75)
         self.label_5.setFont(font)
         self.label_5.setStyleSheet("color: rgb(0, 0, 0);")
         self.label_5.setObjectName("label_5")
@@ -489,67 +502,73 @@ class Ui_MainWindow(object):
         self.verticalLayout_12.addWidget(self.descreption_label)
         self.horizontalLayout_7.addWidget(self.description_text_frame)
         self.buttons_frame_2 = QtWidgets.QFrame(self.description_frame)
+        self.buttons_frame_2.setMinimumSize(QtCore.QSize(0, 0))
         self.buttons_frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.buttons_frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.buttons_frame_2.setObjectName("buttons_frame_2")
         self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.buttons_frame_2)
         self.verticalLayout_9.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_9.setObjectName("verticalLayout_9")
-        self.description_button_1 = QtWidgets.QPushButton(self.buttons_frame_2)
+        self.description_button_1 = QtWidgets.QRadioButton(self.buttons_frame_2)
         self.description_button_1.setText("")
-        self.description_button_1.setIcon(icon9)
-        self.description_button_1.setIconSize(QtCore.QSize(25, 25))
         self.description_button_1.setObjectName("description_button_1")
-        self.verticalLayout_9.addWidget(self.description_button_1, 0, QtCore.Qt.AlignHCenter)
-        self.description_button_2 = QtWidgets.QPushButton(self.buttons_frame_2)
+        self.verticalLayout_9.addWidget(self.description_button_1)
+        self.description_button_2 = QtWidgets.QRadioButton(self.buttons_frame_2)
         self.description_button_2.setText("")
-        self.description_button_2.setIcon(icon10)
-        self.description_button_2.setIconSize(QtCore.QSize(25, 25))
         self.description_button_2.setObjectName("description_button_2")
-        self.verticalLayout_9.addWidget(self.description_button_2, 0, QtCore.Qt.AlignHCenter)
-        self.description_button_3 = QtWidgets.QPushButton(self.buttons_frame_2)
+        self.verticalLayout_9.addWidget(self.description_button_2)
+        self.description_button_3 = QtWidgets.QRadioButton(self.buttons_frame_2)
         self.description_button_3.setText("")
-        self.description_button_3.setIcon(icon10)
-        self.description_button_3.setIconSize(QtCore.QSize(25, 25))
         self.description_button_3.setObjectName("description_button_3")
-        self.verticalLayout_9.addWidget(self.description_button_3, 0, QtCore.Qt.AlignHCenter)
+        self.verticalLayout_9.addWidget(self.description_button_3)
         self.horizontalLayout_7.addWidget(self.buttons_frame_2, 0, QtCore.Qt.AlignRight)
         self.verticalLayout_7.addWidget(self.description_frame)
         self.verticalLayout_6.addWidget(self.info_frame)
         self.verticalLayout_5.addWidget(self.main_information_frame, 0, QtCore.Qt.AlignVCenter)
         self.horizontalLayout_4.addWidget(self.main_area_wrap_frame)
-        self.frame_6 = QtWidgets.QFrame(self.main_page)
+        self.right_arrow_frame = QtWidgets.QFrame(self.main_page)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.frame_6.sizePolicy().hasHeightForWidth())
-        self.frame_6.setSizePolicy(sizePolicy)
-        self.frame_6.setStyleSheet("background: None;\n"
+        sizePolicy.setHeightForWidth(self.right_arrow_frame.sizePolicy().hasHeightForWidth())
+        self.right_arrow_frame.setSizePolicy(sizePolicy)
+        self.right_arrow_frame.setMinimumSize(QtCore.QSize(0, 0))
+        self.right_arrow_frame.setStyleSheet("background: None;\n"
 "")
-        self.frame_6.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_6.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_6.setObjectName("frame_6")
-        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.frame_6)
-        self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.right_arrow_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.right_arrow_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.right_arrow_frame.setObjectName("right_arrow_frame")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.right_arrow_frame)
+        self.verticalLayout_4.setContentsMargins(10, 0, 10, 0)
         self.verticalLayout_4.setSpacing(0)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.right_arrow_button = QtWidgets.QPushButton(self.frame_6)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.right_arrow_button.sizePolicy().hasHeightForWidth())
-        self.right_arrow_button.setSizePolicy(sizePolicy)
-        self.right_arrow_button.setStyleSheet("border: none;\n"
-"outline: none;\n"
-"background: None;")
+        self.right_arrow_button = QtWidgets.QPushButton(self.right_arrow_frame)
+        self.right_arrow_button.setStyleSheet("QPushButton#right_arrow_button {\n"
+"    width: 80px;\n"
+"    height: 250px;\n"
+"    \n"
+"    \n"
+"    border-image: url(:/newPrefix/images/arrow_to_rightsvg.svg);\n"
+"}\n"
+"\n"
+"QPushButton#right_arrow_button::hover {\n"
+"    width: 80px;\n"
+"    height: 250px;\n"
+"    \n"
+"    \n"
+"    border-image: url(:/newPrefix/images/arrow_to_right_hover.svg);\n"
+"}\n"
+"\n"
+"QPushButton#right_arrow_button::pressed {\n"
+"    width: 80px;\n"
+"    height: 250px;\n"
+"    \n"
+"    border-image: url(:/newPrefix/images/arrow_to_right_pressed.svg);\n"
+"}")
         self.right_arrow_button.setText("")
-        icon11 = QtGui.QIcon()
-        icon11.addPixmap(QtGui.QPixmap(":/newPrefix/images/arrow_to_rightsvg.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.right_arrow_button.setIcon(icon11)
-        self.right_arrow_button.setIconSize(QtCore.QSize(100, 200))
         self.right_arrow_button.setObjectName("right_arrow_button")
         self.verticalLayout_4.addWidget(self.right_arrow_button, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.horizontalLayout_4.addWidget(self.frame_6, 0, QtCore.Qt.AlignRight)
+        self.horizontalLayout_4.addWidget(self.right_arrow_frame, 0, QtCore.Qt.AlignRight)
         self.stackedWidget.addWidget(self.main_page)
         self.loading_page = QtWidgets.QWidget()
         self.loading_page.setObjectName("loading_page")
@@ -583,9 +602,6 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Scenery Vision"))
         self.scenary_vision_label.setText(_translate("MainWindow", "S  c  e  n  e  r  y      V  i  s  i  o  n"))
-        self.exel_page_button.setText(_translate("MainWindow", "Exel_page"))
-        self.main_page_button.setText(_translate("MainWindow", "Main_page"))
-        self.loading_page_button.setText(_translate("MainWindow", "Loading_page"))
         self.title_label.setText(_translate("MainWindow", "Кольцо из золота с бриллиантами"))
         self.label_2.setText(_translate("MainWindow", "Общие характеристики"))
         self.characteristics_label.setText(_translate("MainWindow", "fergrgresgrgresgrsegrg"))
