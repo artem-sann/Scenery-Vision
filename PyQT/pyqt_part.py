@@ -4,6 +4,8 @@
 import sys
 import time
 
+from PyQt5.QtGui import QFont
+
 import Thread
 from exel_part import download_image
 from resources import *
@@ -48,6 +50,30 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        # fonts init
+        ################################################################################################################
+        font_abhaya_libre_id = QFontDatabase.addApplicationFont(":/fonts/fonts/AbhayaLibre-Regular.ttf")
+        fontName = QFontDatabase.applicationFontFamilies(font_abhaya_libre_id)[0]
+        self.font_abhaya_libre = QFont(fontName, 42)
+        self.ui.scenary_vision_label.setFont(self.font_abhaya_libre)
+
+        font_mulish_medium_id = QFontDatabase.addApplicationFont(":/fonts/fonts/Mulish-Medium.ttf")
+        fontName = QFontDatabase.applicationFontFamilies(font_mulish_medium_id)[0]
+        self.font_mulish_medium = QFont(fontName, 24)
+        self.ui.title_label.setFont(self.font_mulish_medium)
+
+        font_mulish_bold_id = QFontDatabase.addApplicationFont(":/fonts/fonts/Mulish-Bold.ttf")
+        fontName = QFontDatabase.applicationFontFamilies(font_mulish_bold_id)[0]
+        self.font_mulish_bold = QFont(fontName, 12)
+        self.ui.label_2.setFont(self.font_mulish_bold)
+        self.ui.label_5.setFont(self.font_mulish_bold)
+
+        font_mulish_regular_id = QFontDatabase.addApplicationFont(":/fonts/fonts/Mulish-Regular.ttf")
+        fontName = QFontDatabase.applicationFontFamilies(font_mulish_regular_id)[0]
+        self.font_mulish_regular = QFont(fontName, 10)
+        self.ui.characteristics_label.setFont(self.font_mulish_regular)
+        self.ui.descreption_label.setFont(self.font_mulish_regular)
+        ################################################################################################################
         # Remove window title bar
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)  # type: ignore
         self.ui.stackedWidget.setCurrentWidget(self.ui.exel_page)
