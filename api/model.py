@@ -59,7 +59,7 @@ class ModelRuT5(Model):
             num_return_sequences=self.num_sequences
         )
         decode_outs = [self.tokenizer.decode(ids, skip_special_tokens=True).strip() for ids in outs]
-        return [{"Описание": decode_outs[i * self.num_sequences: i * self.num_sequences + self.num_sequences - 1]} for i in
+        return [{"Описание": decode_outs[i * self.num_sequences: i * self.num_sequences + self.num_sequences]} for i in
                  range(len(parsed_json))]
 
     def parse(self, json):
