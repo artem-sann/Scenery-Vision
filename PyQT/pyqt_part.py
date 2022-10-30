@@ -35,18 +35,6 @@ f_data_cnt = 0
 first_load_flag = True
 
 
-def update_data(data):
-    print("пришло в update")# Получение данных с обновлением API
-    global final_data
-    final_data = final_data.append(data, ignore_index=True)
-    global f_data_cnt
-    f_data_cnt = len(final_data.index)
-    print(final_data)
-    print(f_data_cnt)
-    global first_load_flag
-    first_load_flag = False
-
-
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
@@ -88,7 +76,7 @@ class MainWindow(QMainWindow):
         # # self.setWindowIcon("")
 
         self.api_thread = APIThread()
-        self.api_thread.update_api_data.connect(update_data)
+        self.api_thread.update_api_data.connect(self.update_data)
 
         # Cheat buttons
         self.ui.exel_page_button.clicked.connect(lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.exel_page))
@@ -129,6 +117,18 @@ class MainWindow(QMainWindow):
         # self.ui.pushButton.clicked.connect(lambda: self.slideLeftMenu())
 
         self.show()
+
+    def update_data(self, data):
+        print("пришло в update")# Получение данных с обновлением API
+        global final_data
+        final_data = final_data.append(data, ignore_index=True)
+        global f_data_cnt
+        f_data_cnt = len(final_data.index)
+        print(final_data)
+        print(f_data_cnt)
+        global first_load_flag
+        first_load_flag = False
+
 
     # Browse files function
     def browse_files(self):

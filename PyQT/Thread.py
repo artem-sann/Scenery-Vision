@@ -45,7 +45,13 @@ class APIThread(QThread):
                 slice = self.table.iloc[self.count: self.count + self.batch]
                 json_slice = transform_to_json(slice)
                 response = self.get_response(json_slice)
-                slice["Описание"] = [unit["Описание"] for unit in response]
+                print(len(response[0]["Описание"]))
+                print(len(response[1]["Описание"]))
+                print(len(response[2]["Описание"]))
+                slice["Описание1"] = [unit["Описание"][0] for unit in response]
+                slice["Описание2"] = [unit["Описание"][1] for unit in response]
+                slice["Описание3"] = [unit["Описание"][2] for unit in response]
+                print(slice)
                 self.update_api_data.emit(slice)
 
                 global load_flag
