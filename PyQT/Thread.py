@@ -36,13 +36,10 @@ class APIThread(QThread):
                 if self.flag:
                     self.flag = False
                     self.table = load_and_processing_excel(self.path_to_table)
-                    global load_flag
-                    load_flag = True
                     self.size = self.table.shape[0]
                     global glob_size
                     glob_size = self.size
                     self.count = 0
-
                 if self.count >= self.size:
                     return
                 slice = self.table.iloc[self.count: self.count + self.batch]
@@ -50,6 +47,9 @@ class APIThread(QThread):
                 response = self.get_response(json_slice)
                 slice["Описание"] = [unit["Описание"] for unit in response]
                 self.update_api_data.emit(slice)
+
+                global load_flag
+                load_flag = True
                 self.count += self.batch
             except Exception as ex:
                 print(ex)

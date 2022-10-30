@@ -153,3 +153,4 @@ def transform_to_json(df: pd.DataFrame) -> list:  # преобразует та�
 # TEST
 # path = "C:/Users/artem/Documents/Scenery-Vision/one.xlsx"
 # print(load_and_processing_excel(path))
+# print(download_image("https://pmdn.sokolov.io/pics/FF/07/8B665EE52135149851E8F077FDEA.jpg", "test"))

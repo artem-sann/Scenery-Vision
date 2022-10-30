@@ -18,7 +18,7 @@ from interface import *
 from qt_material import *
 import pandas as pd
 
-from Thread import APIThread, glob_size, load_flag
+from Thread import APIThread
 
 ##############################################################################################################
 # # MAIN WINDOW CLASS
@@ -31,15 +31,20 @@ global desc_index
 desc_index = 0
 
 final_data = pd.DataFrame()
+f_data_cnt = 0
+first_load_flag = True
 
 
-def update_data(data):  # Получение данных с обновлением API
+def update_data(data):
+    print("пришло в update")# Получение данных с обновлением API
     global final_data
     final_data = final_data.append(data, ignore_index=True)
-
+    global f_data_cnt
+    f_data_cnt = len(final_data.index)
     print(final_data)
-    print(glob_size)
-    #TODO Добавить в очередь полученные куски таблицы
+    print(f_data_cnt)
+    global first_load_flag
+    first_load_flag = False
 
 
 class MainWindow(QMainWindow):
@@ -91,7 +96,6 @@ class MainWindow(QMainWindow):
         self.ui.loading_page_button.clicked.connect(
             lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.loading_page))
 
-
         # Hiding unnecessary buttons
         # self.ui.add_button.hide()
         # self.ui.download_button.hide()
@@ -128,17 +132,28 @@ class MainWindow(QMainWindow):
 
     # Browse files function
     def browse_files(self):
-        self.ui.stackedWidget.setCurrentWidget(self.ui.loading_page)
         file_name = QFileDialog.getOpenFileName(self, 'open file', 'C:', 'XLSX files (*xlsx)')[0]
         if file_name != "":
+            self.ui.stackedWidget.setCurrentWidget(self.ui.loading_page)
             self.api_thread.reset_file(file_name)
             self.api_thread.start()
             while not Thread.load_flag:
                 print("ждемс")
                 time.sleep(1)
                 print(Thread.load_flag)
+
             self.ui.stackedWidget.setCurrentWidget(self.ui.main_page)
-            #self.load_page(download_image())
+
+            while first_load_flag:
+                time.sleep(0.5)
+
+            print(final_data.columns)
+            print(final_data["Путь к фото"][page_index])
+            print(download_image(final_data["Путь к фото"][page_index], final_data["Наименование"][page_index]))
+
+            self.load_page(
+                download_image(final_data["Путь к фото"][page_index],
+                               final_data["Наименование"][page_index]), final_data, page_index, char_index, desc_index)
 
     def change_page_left(self):  # left
         global page_index
@@ -146,17 +161,15 @@ class MainWindow(QMainWindow):
             page_index = page_index - 1
             print("left")
 
-
-    def change_page_right(self):   # Right
+    def change_page_right(self):  # Right
         global page_index
-        if page_index < glob_size:
+        if page_index < f_data_cnt:
             page_index = page_index + 1
             print("Right")
 
-
-
     def load_chars(self, chars_data: pd.Series) -> None:
-        generated_text = "\n".join([f"{char_key}: {char_val}" for char_key, char_val in zip(chars_data.index, chars_data.values)])
+        generated_text = "\n".join(
+            [f"{char_key}: {char_val}" for char_key, char_val in zip(chars_data.index, chars_data.values)])
         self.ui.characteristics_label.setText(generated_text)
 
     def load_description(self, description_data: pd.Series, description_idx: int) -> None:
@@ -164,12 +177,12 @@ class MainWindow(QMainWindow):
         self.ui.descreption_label.setText(generated_description)  # type: ignore
 
     def load_page(
-        self, image_path: str,
-        generated_data: pd.DataFrame,
-        page_idx: int, chars_idx: int,
-        description_idx: int,
-        description_col: str = "Описание",
-        chars_on_page: int = 4
+            self, image_path: str,
+            generated_data: pd.DataFrame,
+            page_idx: int, chars_idx: int,
+            description_idx: int,
+            description_col: str = "Описание",
+            chars_on_page: int = 4
     ) -> None:
         # Load image
         # TODO: Resize image (can be done serverside or in download func)
@@ -180,7 +193,8 @@ class MainWindow(QMainWindow):
         cur_characteristics = characteristics[chars_idx:chars_idx + chars_on_page]
         characteristics_data = generated_data[cur_characteristics].iloc[page_idx].copy()
         self.load_chars(characteristics_data)
-        self.load_description(description_data=generated_data[description_col].iloc[page_idx], description_idx=description_idx)
+        self.load_description(description_data=generated_data[description_col].iloc[page_idx],
+                              description_idx=description_idx)
 
     # Add mouse events to the window
 
@@ -208,13 +222,15 @@ class MainWindow(QMainWindow):
     def restore_or_maximize_window(self):
         if self.isMaximized():
             icon2 = QtGui.QIcon()
-            icon2.addPixmap(QtGui.QPixmap(":/newPrefix/images/restore_maximize_2.svg"), QtGui.QIcon.Normal,  # type: ignore
+            icon2.addPixmap(QtGui.QPixmap(":/newPrefix/images/restore_maximize_2.svg"), QtGui.QIcon.Normal,
+                            # type: ignore
                             QtGui.QIcon.Off)  # type: ignore
             self.ui.restore_window_button.setIcon(icon2)
             self.showNormal()
         else:
             icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap(":/newPrefix/images/restore_maximize_1.svg"), QtGui.QIcon.Normal,  # type: ignore
+            icon1.addPixmap(QtGui.QPixmap(":/newPrefix/images/restore_maximize_1.svg"), QtGui.QIcon.Normal,
+                            # type: ignore
                             QtGui.QIcon.Off)  # type: ignore
             self.ui.restore_window_button.setIcon(icon1)
             self.showMaximized()
