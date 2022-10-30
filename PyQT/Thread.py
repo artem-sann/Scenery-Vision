@@ -8,6 +8,20 @@ from exel_part import load_and_processing_excel, transform_to_json
 
 glob_size = 0
 load_flag = False
+emit_data = pd.DataFrame()
+
+final_data = pd.DataFrame()
+f_data_cnt = 0
+first_load_flag = True
+def update_data(data):
+    print("пришло в update")  # Получение данных с обновлением API
+    global final_data
+    final_data = final_data.append(data, ignore_index=True)
+    global f_data_cnt
+    f_data_cnt = len(final_data.index)
+    print(final_data)
+    global first_load_flag
+    first_load_flag = False
 
 class APIThread(QThread):
     update_api_data = pyqtSignal(pd.DataFrame)
@@ -48,11 +62,13 @@ class APIThread(QThread):
                 print(len(response[0]["Описание"]))
                 print(len(response[1]["Описание"]))
                 print(len(response[2]["Описание"]))
-                slice["Описание1"] = [unit["Описание"][0] for unit in response]
+                slice["Описание"] = [unit["Описание"][0] for unit in response]
                 slice["Описание2"] = [unit["Описание"][1] for unit in response]
                 slice["Описание3"] = [unit["Описание"][2] for unit in response]
                 print(slice)
-                self.update_api_data.emit(slice)
+                update_data(slice)
+
+                #self.update_api_data.emit(slice)
 
                 global load_flag
                 load_flag = True
